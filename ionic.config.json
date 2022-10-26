@@ -1,0 +1,7 @@
+{
+  "name": "proyectoWP",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
