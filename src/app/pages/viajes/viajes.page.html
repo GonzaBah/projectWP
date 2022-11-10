@@ -1,0 +1,54 @@
+<ion-fab vertical="top" horizontal="">
+  <ion-fab-button [routerLink]="['/main']" color="dark" size="small">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content>
+  <div class="header" style="text-align: center; padding-top: 28px; margin-bottom: 10px">
+    <ion-label class="fuente" style="font-size: large; color: black;">Viajes Disponibles</ion-label>
+  </div>
+
+  <center style="margin-bottom: 10px">
+    <ion-button fill="outline" color="dark">
+      <ion-icon name="refresh-outline"></ion-icon>
+    </ion-button>
+  </center>
+  <!-- BLOQUE CONDUCTORES-->
+  <ion-card>
+    <ion-item>
+      <ion-avatar>
+        <ion-img src="assets\images\noperfil.jpg"></ion-img>
+      </ion-avatar>
+      <p class="fuenteS" style="margin-left:10px">
+        <label class="fuenteM">Conductor 1</label>
+        <br>Hora de Salida: HH:MM<br>Toca para ver más información
+      </p>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-avatar>
+        <ion-img src="assets\images\noperfil.jpg"></ion-img>
+      </ion-avatar>
+      <p class="fuenteS" style="margin-left:10px">
+        <label class="fuenteM">Conductor 2</label>
+        <br>Hora de Salida: HH:MM<br>Toca para ver más información
+      </p>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <ion-item>
+      <ion-avatar>
+        <ion-img src="assets\images\noperfil.jpg"></ion-img>
+      </ion-avatar>
+      <p class="fuenteS" style="margin-left:10px">
+        <label class="fuenteM">Conductor 3</label>
+        <br>Hora de Salida: HH:MM<br>Toca para ver más información
+      </p>
+    </ion-item>
+  </ion-card>
+  
+</ion-content>

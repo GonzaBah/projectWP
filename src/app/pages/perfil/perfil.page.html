@@ -1,0 +1,50 @@
+<ion-fab vertical="top" horizontal="">
+  <ion-fab-button [routerLink] = "['/main']" color="dark" size="small">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content>
+  <div class="header" style="text-align: center; padding-top: 28px">
+    <ion-label class="fuente label" style="font-size: large; color: black;">Mi Perfil</ion-label>
+  </div>
+  <center>
+    <ion-img class="img" src="assets/images/noperfil.jpg"></ion-img>
+    <ion-icon style="cursor: pointer;" size="large" name="create-outline"></ion-icon>
+  </center>
+  <ion-card style="margin-top:20px">
+    <ion-card-header style="text-align: center; background-color: #2b2b2b;">
+      <ion-label class="fuenteM" style="color: #ffffff;">Datos de Usuario</ion-label>
+    </ion-card-header>
+    <ion-card-content style="text-align: center">
+      <!-- Variables del Usuario -->
+      <!-- Nombre -->
+      <ion-label class="fuente label">Nombre</ion-label>
+      <div class="div-input">
+        <ion-label class="fuente label">Ricardo</ion-label>
+      </div>
+      <!-- Apellido-->
+      <ion-label class="fuente label">Apellido</ion-label>
+      <div class="div-input">
+        <ion-label class="fuente label">Perez</ion-label>
+      </div>
+      <!-- RUT-->
+      <ion-label class="fuente label">RUT</ion-label>
+      <div class="div-input">
+        <ion-label class="fuente label">11.111.111-1</ion-label>
+      </div>
+      <!-- Correo-->
+      <ion-label class="fuente label">Correo</ion-label>
+      <div class="div-input">
+        <ion-label class="fuente label">r.perez10@gmail.com</ion-label>
+      </div>
+      <ion-button class="fuente" style="margin-top: 15px;" fill="outline" color="dark">
+        <ion-icon name="create"></ion-icon>
+        Editar
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+  <center>
+    <ion-button class="fuente" style="margin-top: 15px;" fill="outline" color="dark" [routerLink] = "['/']">Cambiar Contraseña</ion-button>
+  </center>
+</ion-content>

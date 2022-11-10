@@ -1,0 +1,26 @@
+<ion-fab vertical="top" horizontal="">
+  <ion-fab-button [routerLink]="['/main']" color="dark" size="small">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content>
+  <div class="header" style="text-align: center; padding-top: 28px">
+    <ion-label class="fuente" style="font-size: large; color: black;">Creando Viaje</ion-label>
+  </div>
+  <ion-card style="margin-top:20px; padding: 10px">
+    <!-- SECCIÓN DESDE-->
+    <ion-label class="fuenteS label">Desde</ion-label>
+    <div class="div-input">
+      <ion-label class="fuenteM label">Dirección</ion-label>
+    </div>
+    <!-- SECCIÓN HASTA-->
+    <ion-label class="fuenteS label">Hasta</ion-label>
+    <div class="div-input">
+      <ion-label class="fuenteM label">Dirección DUOC</ion-label>
+    </div>
+  </ion-card>
+  <ion-card class="map-ex" style="margin-top:20px;">
+    <ion-img src="assets/images/maps_ex.png"></ion-img>
+  </ion-card>
+</ion-content>

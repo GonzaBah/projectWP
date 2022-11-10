@@ -1,0 +1,44 @@
+<ion-fab vertical="top" horizontal="">
+  <ion-fab-button [routerLink]="['/main']" color="dark" size="small">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content>
+  <div class="header" style="text-align: center; padding-top: 28px">
+    <ion-label class="fuente" style="font-size: large; color: black;">Registro de Viajes</ion-label>
+  </div>
+  <!-- Lista de Registros-->
+  <ion-card style="margin-top:20px;">
+    <ion-item>
+      <ion-avatar>
+        <ion-img src="assets\images\noperfil.jpg"></ion-img>
+      </ion-avatar>
+      <p class="fuenteS" style="margin-left:10px">
+        <label class="fuenteM">Hace unas horas</label>
+        <br>Conductor: Conductor1
+        <br>Toca para ver más información<br>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star-outline"></ion-icon>
+      </p>
+    </ion-item>
+    <ion-item>
+      <ion-avatar>
+        <ion-img src="assets\images\noperfil.jpg"></ion-img>
+      </ion-avatar>
+      <p class="fuenteS" style="margin-left:10px">
+        <label class="fuenteM">Hace 1 día</label>
+        <br>Conductor: Conductor2
+        <br>Toca para ver más información<br>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star-outline"></ion-icon>
+        <ion-icon name="star-outline"></ion-icon>
+      </p>
+    </ion-item>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,54 @@
+<ion-fab vertical="top" horizontal="">
+  <ion-fab-button [routerLink] = "['/main']" color="dark" size="small">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+<ion-content>
+  <div class="header" style="text-align: center; padding-top: 28px">
+    <ion-label class="fuente" style="font-size: large; color: black;">Ajustes</ion-label>
+  </div>
+
+  <ion-card style="margin-top:20px;">
+    <ion-card-header style="text-align: center; background-color: #2b2b2b;">
+      <ion-label class="fuenteM">Usuario</ion-label>
+    </ion-card-header>
+    <ion-card-content style="text-align: center">
+      <ion-button class="fuente" expand="block" fill="outline" color="dark">
+        <ion-icon name="pencil"></ion-icon>
+        Ver Perfil
+      </ion-button>
+      <ion-button class="fuente" expand="block" fill="outline" color="dark">
+        <ion-icon name="car-sport"></ion-icon>
+        Ser Afiliado WayPlace
+      </ion-button>
+      <ion-button class="fuente" expand="block" fill="outline" color="danger">
+        <ion-icon name="close"></ion-icon>
+        Eliminar Cuenta
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header style="text-align: center; background-color: #2b2b2b;">
+      <ion-label class="fuenteM">Afiliado</ion-label>
+    </ion-card-header>
+    <ion-card-content style="text-align: center">
+      <ion-button class="fuente" expand="block" fill="outline" color="dark">
+        <ion-icon name="car"></ion-icon>
+        Vehículo
+      </ion-button>
+      <ion-button class="fuente" expand="block" fill="outline" color="danger">
+        <ion-icon name="exit"></ion-icon>
+        Dejar de Ser Afiliado
+      </ion-button>
+      
+    </ion-card-content>
+  </ion-card>
+  
+</ion-content>
+
+<ion-footer style="background-color: white">
+  <ion-button class="fuente" style="margin-top: 0%; margin-bottom: -2px" expand="full" fill="outline" color="danger" [routerLink] = "['/']">
+    <ion-icon name="arrow-back"></ion-icon>
+    Cerrar Sesión
+  </ion-button>
+</ion-footer>
