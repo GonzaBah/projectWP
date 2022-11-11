@@ -28,13 +28,13 @@
 <ion-content [fullscreen]="true" class="masters">
   <div class="content" id="container">
     <center>
-      <img style="margin-top: 45px; width: 150px;" src="assets\images\logo.png" alt="">
+      <img style="margin-top: 40px; width: 150px;" src="assets\images\logo.png" alt="">
     </center>
     <center>
-      <ion-label class="fuente" style="color: #2b2b2b ;font-size: 20px">¡Bienvenido Usuario!</ion-label>
+      <ion-label class="fuente" style="color: #2b2b2b; font-size: 20px;">¡Bienvenido Usuario!</ion-label>
     </center>
 
-      <ion-grid fixed>
+      <ion-grid fixed style="margin-top: 10px">
         <ion-row>
           <!-- Icono de Viajes -->
           <ion-col size="6">
@@ -44,6 +44,31 @@
               </ion-card-header>
               <ion-card-content>
                 <ion-label class="fuenteM">Viajes</ion-label>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          
+          <!-- Icono de Registro -->
+          <ion-col size="6">
+            <ion-card style="text-align: center;" [routerLink] = "['/registro']">
+              <ion-card-header>
+                <ion-icon name="reader"></ion-icon>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-label class="fuenteM">Registro</ion-label>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <!-- Icono de Mi Perfil -->
+          <ion-col size="6">
+            <ion-card style="text-align: center;" [routerLink] = "['/perfil']">
+              <ion-card-header>
+                <ion-icon name="person"></ion-icon>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-label class="fuenteM">Mi Perfil</ion-label>
               </ion-card-content>
             </ion-card>
           </ion-col>
@@ -58,30 +83,6 @@
               </ion-card-content>
             </ion-card>
           </ion-col>  
-        </ion-row>
-        <ion-row>
-          <!-- Icono de Registro -->
-          <ion-col size="6">
-            <ion-card style="text-align: center;" [routerLink] = "['/registro']">
-              <ion-card-header>
-                <ion-icon name="reader"></ion-icon>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-label class="fuenteM">Registro</ion-label>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-          <!-- Icono de Mi Perfil -->
-          <ion-col size="6">
-            <ion-card style="text-align: center;" [routerLink] = "['/perfil']">
-              <ion-card-header>
-                <ion-icon name="person"></ion-icon>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-label class="fuenteM">Mi Perfil</ion-label>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
         </ion-row>
         
       </ion-grid>
