@@ -10,7 +10,7 @@ import { Viaje } from './clases/viaje';
 @Injectable({
   providedIn: 'root'
 })
-export class SqliteService {
+export class wayDBService {
   public database: SQLiteObject;
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
