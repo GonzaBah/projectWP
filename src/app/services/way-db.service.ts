@@ -28,7 +28,7 @@ export class wayDBService {
   tablaComuna: string = "create table if not exists comuna(idcomuna Integer Primary Key autoincrement, nombreComuna VARCHAR(20) NOT NULL);";
   tablaMarca: string = "create table if not exists marca(idmarca Integer Primary Key autoincrement, nombreMarca VARCHAR(20) NOT NULL);";
 
-  tablaUser: string = "create table if not exists usuario(idusuario Integer Primary Key autoincrement, rut VARCHAR(15) NOT NULL, nombre VARCHAR(50) NOT NULL, apellido VARCHAR(50) NOT NULL, correo VARCHAR(40) NOT NULL, clave VARCHAR(50) NOT NULL, id_rol Integer, foreign key(id_rol) references rol(idrol));";
+  tablaUser: string = "create table if not exists usuario(idusuario Integer Primary Key autoincrement, username VARCHAR(20), rut VARCHAR(15) NOT NULL, nombre VARCHAR(50) NOT NULL, apellido VARCHAR(50) NOT NULL, correo VARCHAR(40) NOT NULL, clave VARCHAR(50) NOT NULL, id_rol Integer, foreign key(id_rol) references rol(idrol));";
   tablaDir: string = "create table if not exists direccion(idDir Integer Primary Key autoincrement, lat DOUBLE NOT NULL, lon DOUBLE NOT NULL, id_usuario Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario));";
 
   tablaAuto: string = "create table if not exists auto(patente VARCHAR(10) Primary Key, color VARCHAR(20) NOT NULL, modelo VARCHAR(40) NOT NULL, annio Integer NOT NULL, id_usuario Integer NOT NULL, id_marca Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario), foreign key(id_marca) references marca(idmarca));";
@@ -39,8 +39,8 @@ export class wayDBService {
   //String para pobrar tablas
   RolPasaj: string = "insert or ignore into rol(idrol, nombreRol) values(0, 'Pasajero');";
   RolAfil: string = "insert or ignore into rol(idrol, nombreRol) values(1, 'Afiliado');";
-  User1: string = "insert or ignore into usuario(idusuario, rut, nombre, apellido, correo, clave, id_rol) values (1, '111-1', 'User', 'Name', 'user@mail.com', '1234', 0)";
-  User2: string = "insert or ignore into usuario(idusuario, rut, nombre, apellido, correo, clave, id_rol) values (2, '222-2', 'Chimba', 'Rongo', 'chimba@rongo.com', 'chimba', 1)";
+  User1: string = "insert or ignore into usuario(idusuario, username, rut, nombre, apellido, correo, clave, id_rol) values (1, 'user.name', '111-1', 'User', 'Name', 'user@mail.com', '1234', 0)";
+  User2: string = "insert or ignore into usuario(idusuario, username, rut, nombre, apellido, correo, clave, id_rol) values (2, 'chimba_rongo', '222-2', 'Chimba', 'Rongo', 'chimba@rongo.com', 'chimba', 1)";
 
   constructor(public sql: SQLite, private platform: Platform) {
     this.platform.ready().then(() => {
@@ -116,6 +116,7 @@ export class wayDBService {
         for (var i = 0; i < res.rows.length; i++) {
           items.push({
             id: res.rows.item(i).idusuario,
+            username: res.rows.item(i).username,
             rut: res.rows.item(i).rut,
             nombre: res.rows.item(i).nombre,
             apellido: res.rows.item(i).apellido,

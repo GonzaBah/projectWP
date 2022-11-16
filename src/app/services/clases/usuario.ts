@@ -1,5 +1,6 @@
 export class Usuario {
     id: number;
+    username: string;
     rut: string;
     nombre: string;
     apellido: string;
