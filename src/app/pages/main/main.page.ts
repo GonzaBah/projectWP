@@ -11,7 +11,7 @@ export class MainPage implements OnInit {
   constructor(private storage: Storage) { 
     this.storage.get('user').then((data) => {
       this.user = data;
-      console.log(JSON.stringify(this.user));
+      console.log("PRUEBA STORAGE: "+this.user.nombre);
     });
     
   }

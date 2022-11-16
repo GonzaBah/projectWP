@@ -10,7 +10,7 @@ import { wayDBService } from '../services/way-db.service'
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit{
-  arrayUser: any[];
+  arrayUser: any[] = [];
   correo: any;
   pass: any;
   constructor(private toastController: ToastController, private router: Router, private wayDB: wayDBService, private storage: Storage) {
@@ -59,6 +59,14 @@ export class HomePage implements OnInit{
         })
       }
     })
+    
     this.storage.create();
+
+    if(this.storage.get('user')){
+      this.storage.get('user').then((data) => {
+        this.inicioToast(data.nombre);
+      })
+      return this.router.navigate(['/main']);
+    }
   }
 }
