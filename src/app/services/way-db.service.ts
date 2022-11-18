@@ -6,6 +6,7 @@ import { Auto } from './clases/auto';
 import { Marca } from './clases/marca';
 import { Usuario } from './clases/usuario';
 import { Viaje } from './clases/viaje';
+import { DetViaje } from './clases/det-viaje';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class wayDBService {
   listaAutos = new BehaviorSubject([]);
   listaMarcas = new BehaviorSubject([]);
   listaViajes = new BehaviorSubject([]);
+  listaDetViaje = new BehaviorSubject([]);
   //Lista de Marcas a registrar
   Marcas = ['Audi', 'Bentley', 'BMW', 'Chevrolet', 'Citroen', 'Dacia', 'Ford', 'Fiat', 'Hyundai', 'Honda', 'Infiniti', 'KIA', 'Land-Rover', 'Lexus', 'Nissan', 'Open', 'Peugeot', 'Porsche', 'Renault', 'Subaru', 'Suzuki', 'Toyota'];
   //String con la creación de tablas
@@ -28,7 +30,7 @@ export class wayDBService {
   tablaComuna: string = "create table if not exists comuna(idcomuna Integer Primary Key autoincrement, nombreComuna VARCHAR(20) NOT NULL);";
   tablaMarca: string = "create table if not exists marca(idmarca Integer Primary Key autoincrement, nombreMarca VARCHAR(20) NOT NULL);";
 
-  tablaUser: string = "create table if not exists usuario(idusuario Integer Primary Key autoincrement, username VARCHAR(20), rut VARCHAR(15) NOT NULL, nombre VARCHAR(50) NOT NULL, apellido VARCHAR(50) NOT NULL, correo VARCHAR(40) NOT NULL, clave VARCHAR(50) NOT NULL, id_rol Integer, foreign key(id_rol) references rol(idrol));";
+  tablaUser: string = "create table if not exists usuario(idusuario Integer Primary Key autoincrement, username VARCHAR(20), rut VARCHAR(15) NOT NULL, nombre VARCHAR(50) NOT NULL, apellido VARCHAR(50) NOT NULL, correo VARCHAR(40) NOT NULL, clave VARCHAR(50) NOT NULL, foto BLOB, id_rol Integer, foreign key(id_rol) references rol(idrol));";
   tablaDir: string = "create table if not exists direccion(idDir Integer Primary Key autoincrement, lat DOUBLE NOT NULL, lon DOUBLE NOT NULL, id_usuario Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario));";
 
   tablaAuto: string = "create table if not exists auto(patente VARCHAR(10) Primary Key, color VARCHAR(20) NOT NULL, modelo VARCHAR(40) NOT NULL, annio Integer NOT NULL, id_usuario Integer NOT NULL, id_marca Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario), foreign key(id_marca) references marca(idmarca));";
@@ -65,6 +67,9 @@ export class wayDBService {
   fetchViajes(): Observable<Viaje[]> {
     return this.listaViajes.asObservable();
   }
+  fetchDetViaje(): Observable<DetViaje[]> {
+    return this.listaDetViaje.asObservable();
+  }
 
   crearDB() {
     this.sql.create({
@@ -90,20 +95,22 @@ export class wayDBService {
       await this.database.executeSql(this.tablaViajeCom, []);
       await this.database.executeSql(this.tablaComentario, []);
       //Poblar base de datos
-      await this.database.executeSql("insert or ignore into auto(patente, color, modelo, annio, id_usuario, id_marca) values('AA-AA-11', 'Rojo', '370Z', 2012, 2, 14)", []);
-      await this.database.executeSql("insert or ignore into viaje(idviaje, fechaViaje, horaSalida, asientoDisp, monto, salida, patenteAuto) values(0, '16-10-2022', '10:20', 0, 4700, 'Colina', 'AA-AA-11')", []);
+      for (let i=0; i < this.Marcas.length; i++){
+        await this.database.executeSql("insert or ignore into marca(idmarca, nombreMarca) values(?,?)", [i, this.Marcas[i]]);
+      }
       await this.database.executeSql(this.RolPasaj, []);
       await this.database.executeSql(this.RolAfil, []);
       await this.database.executeSql(this.User1, []);
       await this.database.executeSql(this.User2, []);
+      await this.database.executeSql("insert or ignore into auto(patente, color, modelo, annio, id_usuario, id_marca) values('AA-AA-11', 'Rojo', '370Z', 2012, 2, 14)", []);
+      await this.database.executeSql("insert or ignore into viaje(idviaje, fechaViaje, horaSalida, asientoDisp, monto, salida, patenteAuto) values(0, '16-10-2022', '10:20', 0, 4700, 'Colina', 'AA-AA-11')", []);
+      await this.agregarDetViaje('activo', 2, 0);
       //Poblar tabla Marca con las Marcas más conocidas
-      for (let i=0; i < this.Marcas.length; i++){
-        await this.database.executeSql("insert or ignore into marca(idmarca, nombreMarca) values(?,?)", [i, this.Marcas[i]]);
-      }
       this.returnUsers();
       this.returnAutos();
       this.returnMarcas();
       this.returnViajes();
+      this.returnDetViajes();
       this.isDBReady.next(true);
     } catch (e) {
       console.log(e);
@@ -122,6 +129,7 @@ export class wayDBService {
             apellido: res.rows.item(i).apellido,
             correo: res.rows.item(i).correo,
             clave: res.rows.item(i).clave,
+            foto: res.rows.item(i).foto,
             idRol: res.rows.item(i).id_rol
           })
         }
@@ -173,13 +181,30 @@ export class wayDBService {
             asientosDisp: res.rows.item(i).asientoDisp,
             monto: res.rows.item(i).monto,
             salida: res.rows.item(i).salida,
-            patente: res.rows.item(i).patente
+            patente: res.rows.item(i).patenteAuto
           })
         }
       }
       this.listaViajes.next(items);
     })
   }
+  returnDetViajes(){
+    return this.database.executeSql('select * from detalle_viaje', []).then(res => {
+      let items: DetViaje[] = [];
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          items.push({
+            idDet: res.rows.item(i).idDetalle,
+            status: res.rows.item(i).status,
+            idusuario: res.rows.item(i).idusuario,
+            idviaje: res.rows.item(i).idviaje,
+          })
+        }
+      }
+      this.listaDetViaje.next(items);
+    })
+  }
+  
   //Funciones para agregar y editar de la base de datos
   agregarUser(rut, nombre, apellido, correo, clave, id_rol) {
     let data = [rut, nombre, apellido, correo, clave, id_rol];
@@ -187,9 +212,15 @@ export class wayDBService {
       this.returnUsers();
     })
   }
-  editarUser(id, rut, nombre, apellido, correo, clave, id_rol) {
-    let data = [rut, nombre, apellido, correo, clave, id_rol, id];
+  editarUser(id, username, rut, nombre, apellido, correo, clave, id_rol) {
+    let data = [username, rut, nombre, apellido, correo, clave, id_rol, id];
     return this.database.executeSql('update usuario set rut = ?, nombre = ?, apellido = ?, correo = ?, clave = ?, id_rol = ? where idusuario = ?', data).then(res => {
+      this.returnUsers();
+    })
+  }
+  editarPhoto(id, foto){
+    let data = [foto, id];
+    return this.database.executeSql('update usuario set foto = ? where idusuario = ?', data).then(res => {
       this.returnUsers();
     })
   }
@@ -205,10 +236,17 @@ export class wayDBService {
       this.returnAutos();
     })
   }
+  agregarDetViaje(status, idusuario, idviaje){
+    let detalle = [status, idusuario, idviaje];
+    return this.database.executeSql('insert into detalle_viaje(status,id_usuario,id_viaje) values(?,?,?)', detalle).then(res => {
+      this.returnDetViajes();
+    })
+  }
   agregarViaje(fecha, hora, asiento, monto, salida, patente){
     let data = [fecha, hora, asiento, monto, salida, patente];
     return this.database.executeSql('insert into viaje(fechaViaje, horaSalida, asientoDisp, salida, patenteAuto) values(?,?,?,?,?,?)', data).then(res => {
       this.returnViajes();
     })
   }
+  
 }

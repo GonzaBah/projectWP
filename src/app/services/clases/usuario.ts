@@ -6,5 +6,6 @@ export class Usuario {
     apellido: string;
     correo: string;
     clave: string;
+    foto: string;
     idRol: number;
 }
