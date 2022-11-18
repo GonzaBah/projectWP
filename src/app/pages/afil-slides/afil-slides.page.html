@@ -1,0 +1,40 @@
+<ion-fab vertical="top" horizontal="">
+  <ion-fab-button [routerLink]="['/main']" color="dark" size="small">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content>
+  <!--Modulo de Slide-->
+  <ion-slides pager="true">
+    <ion-slide>
+      <div class="slide">
+        <ion-icon class="iconSize" name="car"></ion-icon>
+        <h2>Ser WayDriver</h2>
+        <p>
+          <b>¿Quieres convertirte en Conductor oficial de WayPlace?</b> ¡Enhorabuena! Estamos
+          buscando conductores
+          
+        </p>
+        <ion-icon slot="center" name="arrow-forward"></ion-icon>
+      </div>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-icon class="iconSize" name="alert-circle"></ion-icon>
+      <h2>¡Importante!</h2>
+      <p>
+        Recuerda que como conductor debes seguir los <a href="">lineamientos de conductores WayPlace</a>
+        para mantener el respeto y buen trato de los pasajeros.
+      </p>
+      <ion-icon slot="center" name="arrow-forward"></ion-icon>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-icon class="iconSize" name="checkmark"></ion-icon>
+      <h2>¿Estás listo?</h2>
+      <ion-button fill="clear" [routerLink]="['/afil-veh']" >Empezar <ion-icon slot="end" name="arrow-forward"></ion-icon></ion-button>
+    </ion-slide>
+  </ion-slides>
+  <!--Fin del modulo de Slide-->
+</ion-content>

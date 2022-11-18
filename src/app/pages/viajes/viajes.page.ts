@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { wayDBService } from 'src/app/services/way-db.service';
 import { Viaje } from 'src/app/services/clases/viaje'
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-viajes',
@@ -19,8 +20,17 @@ export class ViajesPage implements OnInit {
     patente: '',
   }];
 
-  constructor(private wayDB: wayDBService) { }
+  constructor(private alertController: AlertController, private wayDB: wayDBService) { }
 
+  async presentConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Detalles del Viaje',
+      subHeader: 'Aquí irán los detalles del viaje',
+      buttons: ['Continuar'],
+    });
+
+    await alert.present();
+  }
   refresh(){
     
   }
@@ -32,9 +42,6 @@ export class ViajesPage implements OnInit {
         })
       }
     })
-    for (let i of this.arrayViajes){
-      console.log("PATENTE: " + i.patente);
-    }
   }
 
 }

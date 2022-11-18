@@ -18,16 +18,12 @@ export class MainPage implements OnInit {
     clave: '',
     idRol: 0
   };
-  constructor(private storage: Storage) { 
+  constructor(private storage: Storage) { }
+
+  ngOnInit() {
     this.storage.get('user').then((data) => {
       this.user = data;
       console.log("PRUEBA STORAGE: "+this.user.idRol);
     });
-    
   }
-
-  ngOnInit() {
-    
-  }
-
 }

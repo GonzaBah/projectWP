@@ -62,11 +62,12 @@ export class HomePage implements OnInit{
     
     this.storage.create();
 
-    if(this.storage.get('user')){
-      this.storage.get('user').then((data) => {
-        this.inicioToast(data.nombre);
-      })
+    this.storage.get('user').then(data => {
+      this.inicioToast(data.nombre);
+      
       return this.router.navigate(['/main']);
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   }
 }

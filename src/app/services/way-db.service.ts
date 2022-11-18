@@ -206,15 +206,20 @@ export class wayDBService {
   }
   
   //Funciones para agregar y editar de la base de datos
-  agregarUser(rut, nombre, apellido, correo, clave, id_rol) {
-    let data = [rut, nombre, apellido, correo, clave, id_rol];
-    return this.database.executeSql('insert into usuario(rut, nombre, apellido, correo, clave, id_rol) values (?,?,?,?,?,?)', data).then(res => {
+  agregarUser(username, rut, nombre, apellido, correo, clave, id_rol) {
+    let data = [username, rut, nombre, apellido, correo, clave, id_rol];
+    return this.database.executeSql('insert into usuario(username, rut, nombre, apellido, correo, clave, id_rol) values (?,?,?,?,?,?,?)', data).then(res => {
       this.returnUsers();
     })
   }
   editarUser(id, username, rut, nombre, apellido, correo, clave, id_rol) {
     let data = [username, rut, nombre, apellido, correo, clave, id_rol, id];
-    return this.database.executeSql('update usuario set rut = ?, nombre = ?, apellido = ?, correo = ?, clave = ?, id_rol = ? where idusuario = ?', data).then(res => {
+    return this.database.executeSql('update usuario set username = ?, rut = ?, nombre = ?, apellido = ?, correo = ?, clave = ?, id_rol = ? where idusuario = ?', data).then(res => {
+      this.returnUsers();
+    })
+  }
+  deleteUser(id){
+    return this.database.executeSql('delete from usuario where idusuario = ?', [id]).then(res => {
       this.returnUsers();
     })
   }

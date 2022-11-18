@@ -34,7 +34,15 @@ const routes: Routes = [
   {
     path: 'new-viaje',
     loadChildren: () => import('./pages/new-viaje/new-viaje.module').then( m => m.NewViajePageModule)
+  },  {
+    path: 'afil-slides',
+    loadChildren: () => import('./pages/afil-slides/afil-slides.module').then( m => m.AfilSlidesPageModule)
   },
+  {
+    path: 'afil-veh',
+    loadChildren: () => import('./pages/afil-veh/afil-veh.module').then( m => m.AfilVehPageModule)
+  },
+
 ];
 
 @NgModule({
