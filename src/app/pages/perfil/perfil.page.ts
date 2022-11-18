@@ -32,12 +32,12 @@ export class PerfilPage implements OnInit {
       console.log("PRUEBA STORAGE: "+this.user.foto);
     });
   }
-  actualizar(id){
+  async actualizar(id){
     for(let i of this.arrayUser){
       if(id == i.id){
         //LOCAL STORAGE
-        this.storage.set('user', i);
-        this.storage.get('user').then(data => {
+        await this.storage.set('user', i);
+        await this.storage.get('user').then(data => {
           this.user = data;
         })
       }
@@ -48,7 +48,7 @@ export class PerfilPage implements OnInit {
     this.camera.takePicture(this.user.id);
     this.actualizar(this.user.id);
 
-    return this.router.navigate(['/main']).then(e => {
+    return this.router.navigate(['']).then(e => {
       this.router.navigate(['/perfil']);
     })
   }
