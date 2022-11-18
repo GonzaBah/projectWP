@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { MapaComponent } from './components/mapa/mapa.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,11 @@ const routes: Routes = [
     path: 'new-viaje',
     loadChildren: () => import('./pages/new-viaje/new-viaje.module').then( m => m.NewViajePageModule)
   },
+  {
+    path: 'mapagoogle',component: MapaComponent,
+    loadChildren: () => import('./pages/mapagoogle/mapagoogle.module').then( m => m.MapagooglePageModule)
+  },
+
 ];
 
 @NgModule({
