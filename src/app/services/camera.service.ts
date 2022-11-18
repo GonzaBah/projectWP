@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { Storage } from '@ionic/storage';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Usuario } from './clases/usuario';
 import { wayDBService } from './way-db.service';
 
@@ -8,7 +9,7 @@ import { wayDBService } from './way-db.service';
   providedIn: 'root'
 })
 export class CameraService {
-
+  foto = new BehaviorSubject([]);
   arrayUser: Usuario[] = [];
   base64Image: any;
   constructor(private storage: Storage, private camera: Camera, private wayDB: wayDBService) { 
@@ -21,7 +22,7 @@ export class CameraService {
     })
   }
 
-  takePicture(id){
+  takePicture(){
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -32,11 +33,12 @@ export class CameraService {
     this.camera.getPicture(options).then((imageData) => {
       this.base64Image = 'data:image/jpeg;base64,' + imageData;
       console.log("FOTO: " + imageData);
-      this.wayDB.editarPhoto(id, this.base64Image);
-      
+      this.foto.next(this.base64Image);
      }, (err) => { 
       console.log('ERROR: '+err);
      });
   }
-
+  fetchFoto(): Observable<any>{
+    return this.foto.asObservable();
+  }
 }

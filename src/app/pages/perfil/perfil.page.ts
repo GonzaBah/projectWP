@@ -11,8 +11,8 @@ import { wayDBService } from 'src/app/services/way-db.service';
 })
 export class PerfilPage implements OnInit {
   arrayUser: any[] = [];
-  arrayPhoto: any[] = [];
-  photolink = '/noperfil.jpg';
+  Photo: any;
+  photo2: any;
 
   user: any = {
     id: 0,
@@ -26,30 +26,26 @@ export class PerfilPage implements OnInit {
     idRol: 0
   };
 
-  constructor(private router: Router, private storage: Storage, private wayDB: wayDBService, private camera: CameraService) {
-    this.storage.get('user').then((data) => {
-      this.user = data;
-      console.log("PRUEBA STORAGE: "+this.user.foto);
-    });
-  }
-  actualizar(id){
-    for(let i of this.arrayUser){
-      if(id == i.id){
-        //LOCAL STORAGE
-        this.storage.set('user', i);
-        this.storage.get('user').then(data => {
-          this.user = data;
-        })
-      }
+  constructor(private router: Router, private storage: Storage, private wayDB: wayDBService, private camera: CameraService) { }
+  actualizar() {
+    this.wayDB.editarPhoto(this.user.id, this.Photo);
+    this.storage.clear();
+    for (let i of this.arrayUser) {
+      //LOCAL STORAGE
+      this.storage.set('user', i);
+      this.storage.get('user').then(data => {
+        this.user = data;
+      })
     }
+    this.photo2 = this.Photo;
   }
 
-  cambiarPhoto(){
-    this.camera.takePicture(this.user.id);
-    this.actualizar(this.user.id);
+  cambiarPhoto() {
+    this.camera.takePicture();
+    this.actualizar();
 
-    return this.router.navigate(['/main']).then(e => {
-      this.router.navigate(['/perfil']);
+    this.router.navigate(['/main']).then(e => {
+      return this.router.navigate(['/perfil']);
     })
   }
 
@@ -61,7 +57,17 @@ export class PerfilPage implements OnInit {
         })
       }
     })
-    
+    this.camera.fetchFoto().subscribe(item => {
+      this.Photo = item;
+    })
+    this.storage.get('user').then((data) => {
+      this.user = data;
+      console.log("PRUEBA STORAGE: " + this.user.foto);
+    });
+    if(this.user.foto == ''){
+      this.photo2 = '/assets/images/noperfil.jpg'
+    }else{
+      this.photo2 = this.user.foto;
+    }
   }
-
 }

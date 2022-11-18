@@ -19,6 +19,7 @@ export class wayDBService {
   users: any;
 
   listaUsuarios = new BehaviorSubject([]);
+
   listaAutos = new BehaviorSubject([]);
   listaMarcas = new BehaviorSubject([]);
   listaViajes = new BehaviorSubject([]);
@@ -34,7 +35,7 @@ export class wayDBService {
   tablaDir: string = "create table if not exists direccion(idDir Integer Primary Key autoincrement, lat DOUBLE NOT NULL, lon DOUBLE NOT NULL, id_usuario Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario));";
 
   tablaAuto: string = "create table if not exists auto(patente VARCHAR(10) Primary Key, color VARCHAR(20) NOT NULL, modelo VARCHAR(40) NOT NULL, annio Integer NOT NULL, id_usuario Integer NOT NULL, id_marca Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario), foreign key(id_marca) references marca(idmarca));";
-  tablaViaje: string = "create table if not exists viaje(idviaje Integer Primary Key autoincrement, fechaViaje DATE NOT NULL, horaSalida VARCHAR(6) NOT NULL, asientoDisp Integer NOT NULL, monto Integer NOT NULL, salida VARCHAR(15) NOT NULL, patenteAuto VARCHAR(10), foreign key(patenteAuto) references auto(patente));";
+  tablaViaje: string = "create table if not exists viaje(idviaje Integer Primary Key autoincrement, fechaViaje DATE NOT NULL, horaSalida VARCHAR(6) NOT NULL, asientoDisp Integer NOT NULL, monto Integer NOT NULL, salida VARCHAR(15) NOT NULL, llegada VARCHAR(15) NOT NULL, patenteAuto VARCHAR(10), foreign key(patenteAuto) references auto(patente));";
   tablaDetViaje: string = "create table if not exists detalle_viaje(idDetalle Integer Primary Key autoincrement, status VARCHAR(15) NOT NULL, id_usuario Integer NOT NULL, id_viaje Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario), foreign key(id_viaje) references viaje(idviaje));";
   tablaViajeCom: string = "create table if not exists viajeComuna(id Integer Primary Key autoincrement, id_viaje Integer, id_comuna Integer, foreign key(id_viaje) references viaje(idviaje), foreign key(id_comuna) references comuna(idcomuna));";
   tablaComentario: string = "create table if not exists comentario(idCom Integer Primary Key autoincrement, textoCom VARCHAR(150) NOT NULL, idViaje Integer, idUsuario Integer, foreign key(idViaje) references viaje(idviaje), foreign key(idUsuario) references usuario(idusuario));";
@@ -95,7 +96,7 @@ export class wayDBService {
       await this.database.executeSql(this.tablaViajeCom, []);
       await this.database.executeSql(this.tablaComentario, []);
       //Poblar base de datos
-      for (let i=0; i < this.Marcas.length; i++){
+      for (let i = 0; i < this.Marcas.length; i++) {
         await this.database.executeSql("insert or ignore into marca(idmarca, nombreMarca) values(?,?)", [i, this.Marcas[i]]);
       }
       await this.database.executeSql(this.RolPasaj, []);
@@ -137,6 +138,25 @@ export class wayDBService {
       this.listaUsuarios.next(items);
     })
   }
+  returnUser(id) {
+    return this.database.executeSql('select * from usuario where id = ?', [id]).then(res => {
+      let items: Usuario[] = [];
+      if (res.rows.length > 0) {
+        items.push({
+          id: res.rows.item.idusuario,
+          username: res.rows.item.username,
+          rut: res.rows.item.rut,
+          nombre: res.rows.item.nombre,
+          apellido: res.rows.item.apellido,
+          correo: res.rows.item.correo,
+          clave: res.rows.item.clave,
+          foto: res.rows.item.foto,
+          idRol: res.rows.item.id_rol
+        })
+      }
+      this.listaUsuarios.next(items);
+    })
+  }
   returnMarcas() {
     return this.database.executeSql('select * from marca', []).then(res => {
       let items: Marca[] = [];
@@ -169,7 +189,7 @@ export class wayDBService {
       this.listaAutos.next(items);
     })
   }
-  returnViajes(){
+  returnViajes() {
     return this.database.executeSql('select * from viaje', []).then(res => {
       let items: Viaje[] = [];
       if (res.rows.length > 0) {
@@ -188,7 +208,7 @@ export class wayDBService {
       this.listaViajes.next(items);
     })
   }
-  returnDetViajes(){
+  returnDetViajes() {
     return this.database.executeSql('select * from detalle_viaje', []).then(res => {
       let items: DetViaje[] = [];
       if (res.rows.length > 0) {
@@ -204,7 +224,7 @@ export class wayDBService {
       this.listaDetViaje.next(items);
     })
   }
-  
+
   //Funciones para agregar y editar de la base de datos
   agregarUser(username, rut, nombre, apellido, correo, clave, id_rol) {
     let data = [username, rut, nombre, apellido, correo, clave, id_rol];
@@ -215,21 +235,21 @@ export class wayDBService {
   editarUser(id, username, rut, nombre, apellido, correo, clave, id_rol) {
     let data = [username, rut, nombre, apellido, correo, clave, id_rol, id];
     return this.database.executeSql('update usuario set username = ?, rut = ?, nombre = ?, apellido = ?, correo = ?, clave = ?, id_rol = ? where idusuario = ?', data).then(res => {
-      this.returnUsers();
+      this.returnUser(id);
     })
   }
-  deleteUser(id){
+  deleteUser(id) {
     return this.database.executeSql('delete from usuario where idusuario = ?', [id]).then(res => {
       this.returnUsers();
     })
   }
-  editarPhoto(id, foto){
+  editarPhoto(id, foto) {
     let data = [foto, id];
     return this.database.executeSql('update usuario set foto = ? where idusuario = ?', data).then(res => {
-      this.returnUsers();
+      this.returnUser(id);
     })
   }
-  agregarAuto(patente, color, modelo, annio, idusuario, idmarca){
+  agregarAuto(patente, color, modelo, annio, idusuario, idmarca) {
     let data = [patente, color, modelo, annio, idusuario, idmarca];
     return this.database.executeSql('insert into auto(patente, color, modelo, annio, id_usuario, id_marca) values (?,?,?,?,?,?)', data).then(res => {
       this.returnAutos();
@@ -241,17 +261,17 @@ export class wayDBService {
       this.returnAutos();
     })
   }
-  agregarDetViaje(status, idusuario, idviaje){
+  agregarDetViaje(status, idusuario, idviaje) {
     let detalle = [status, idusuario, idviaje];
     return this.database.executeSql('insert into detalle_viaje(status,id_usuario,id_viaje) values(?,?,?)', detalle).then(res => {
       this.returnDetViajes();
     })
   }
-  agregarViaje(fecha, hora, asiento, monto, salida, patente){
+  agregarViaje(fecha, hora, asiento, monto, salida, patente) {
     let data = [fecha, hora, asiento, monto, salida, patente];
     return this.database.executeSql('insert into viaje(fechaViaje, horaSalida, asientoDisp, salida, patenteAuto) values(?,?,?,?,?,?)', data).then(res => {
       this.returnViajes();
     })
   }
-  
+
 }
