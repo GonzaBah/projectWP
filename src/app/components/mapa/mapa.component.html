@@ -1,34 +1,23 @@
-<h1>Mapa Angular</h1>
-
-<button (click)="mapRuta()">Calcular ruta</button>
-<h1>La distancia es: {{distancia}}</h1>
-
-
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="container" [fullscreen]="true">
 <div class="formulario">
     <form [formGroup]="formMapas" (ngSubmit)="onSubmit()">
-      <input type="text" #inputOrigen id="inputOrigen" formControlName="busqueda">
-      <input type="text" #inputDestino id="inputDestino" formControlName="busqueda">
-  
-      <div class="form panel">
-  
-        <div>
-          <img class="sb-title-icon" src=""
-            alt="">
-        </div>
-  
-        <input type="text" placeholder="Direccion" formControlName="direccion" />
-        <input type="text" placeholder="Edificio, departamento, piso (opcional)" formControlName="referencia" />
-        <input type="text" placeholder="Ciudad" class="ciudad" formControlName="ciudad" />
-        <input type="text" placeholder="Provincia" formControlName="provincia" />
-        <div class="half-input-container">
-          <input type="text" class="half-input" placeholder="Region" formControlName="region" />
-        </div>
-  
-        <ion-button class="button-cta" (click)='mapRuta()' type="submit">Guardar</ion-button>
-  
+      <div class="input-container">
+        <input type="text" #inputOrigen id="inputOrigen" formControlName="busqueda">
+        <input type="text" #inputDestino id="inputDestino" formControlName="busqueda">
+    
       </div>
-
       <div class="mapa" id="divMap" #divMap></div>
-      
     </form>
-  </div>
+
+    <ion-button expand="full" color="dark" class="button-cta" (click)='mapRuta()' type="submit">Comenzar Ruta</ion-button>
+
+</div>
+
+</ion-content>

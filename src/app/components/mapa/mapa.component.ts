@@ -20,6 +20,7 @@ export class MapaComponent implements OnInit {
   formMapas!: FormGroup;
   origen: {};
   destino: {};
+ 
 
   constructor(private renderer: Renderer2) {
 

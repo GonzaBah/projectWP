@@ -37,7 +37,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/new-viaje/new-viaje.module').then( m => m.NewViajePageModule)
   },
   {
-    path: 'mapagoogle',component: MapaComponent,
+    path: 'mapagoogle', component: MapaComponent,
     loadChildren: () => import('./pages/mapagoogle/mapagoogle.module').then( m => m.MapagooglePageModule)
   },
 
