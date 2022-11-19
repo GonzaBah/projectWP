@@ -1,23 +1,23 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-fab vertical="top" horizontal="">
+  <ion-fab-button [routerLink]="['/main']" color="dark" size="small">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
 <ion-content class="container" [fullscreen]="true">
-<div class="formulario">
+  <div class="formulario">
     <form [formGroup]="formMapas" (ngSubmit)="onSubmit()">
       <div class="input-container">
         <input type="text" #inputOrigen id="inputOrigen" formControlName="busqueda">
         <input type="text" #inputDestino id="inputDestino" formControlName="busqueda">
-    
+
       </div>
       <div class="mapa" id="divMap" #divMap></div>
     </form>
 
-    <ion-button expand="full" color="dark" class="button-cta" (click)='mapRuta()' type="submit">Comenzar Ruta</ion-button>
+    <ion-button expand="full" color="dark" class="button-cta" (click)='mapRuta()' type="submit">Comenzar Ruta
+    </ion-button>
 
-</div>
+  </div>
 
 </ion-content>

@@ -1,7 +1,7 @@
 ///<reference path="../../../../node_modules/@types/googlemaps/index.d.ts"/>
 
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormControl,FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-mapa',
@@ -20,7 +20,7 @@ export class MapaComponent implements OnInit {
   formMapas!: FormGroup;
   origen: {};
   destino: {};
- 
+
 
   constructor(private renderer: Renderer2) {
 
@@ -39,7 +39,7 @@ export class MapaComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
+
   }
 
   ngAfterViewInit(): void {
@@ -49,18 +49,18 @@ export class MapaComponent implements OnInit {
       timeout: 6000,
       maximumAge: 0
     }
-
-
     if (navigator.geolocation) {
-
+      console.log('PROBANDO' + navigator.geolocation.getCurrentPosition(pos => {
+        pos;
+      }))
       navigator.geolocation.getCurrentPosition(async (position) => {
-        console.log("Ubicación actual (autodoxeo)",position)
+        console.log("Ubicación actual (autodoxeo)", position)
         this.origen = {
           latitud: position.coords.latitude,
           longitud: position.coords.longitude,
         };
         console.log(this.origen)
-        
+
         await this.cargarMapa(position);
         this.cargarAutocomplete();
         this.cargarAutocomplete2();
@@ -101,8 +101,6 @@ export class MapaComponent implements OnInit {
     }, resultado => {
       console.log(resultado);
       directionRender.setDirections(resultado);
-
-
     });
 
   }
@@ -128,10 +126,10 @@ export class MapaComponent implements OnInit {
       this.destino = place.geometry.location.LatLng;
 
       this.mapa.setCenter(place.geometry.location);
-      
-      
 
-      
+
+
+
       this.llenarFormulario(place);
     })
   }
@@ -155,7 +153,7 @@ export class MapaComponent implements OnInit {
       this.destino = place.geometry.location.LatLng;
 
       this.mapa.setCenter(place.geometry.location);
-      
+
       this.llenarFormulario(place);
     })
   }
@@ -192,9 +190,6 @@ export class MapaComponent implements OnInit {
       region: 'administrative_area_level_1'
     };
 
-
-
-
     Object.entries(componentForm).forEach(entry => {
       const [key, value] = entry;
 
@@ -214,22 +209,7 @@ export class MapaComponent implements OnInit {
       mapTypeId: google.maps.MapTypeId.ROADMAP
 
     };
-    
-    
-
     this.mapa = new google.maps.Map(this.renderer.selectRootElement(this.divMap.nativeElement), opciones)
-
-
-
-
-
   };
-
-
-
-
-    
-
-
 
 }
