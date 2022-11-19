@@ -11,7 +11,7 @@ import { wayDBService } from '../services/way-db.service'
 })
 export class HomePage implements OnInit{
   arrayUser: any[] = [];
-  correo: any;
+  username: any;
   pass: any;
   constructor(private toastController: ToastController, private router: Router, private wayDB: wayDBService, private storage: Storage) {
   }
@@ -35,10 +35,11 @@ export class HomePage implements OnInit{
   async login() {
     let ini = 0;
     for(let i of this.arrayUser){
-      if(this.correo == i.correo && this.pass == i.clave){
+      if(this.username == i.username && this.pass == i.clave){
         //LOCAL STORAGE
-        this.storage.set('user', i);
+        this.storage.set('user', i.id);
         this.inicioToast(i.nombre);
+        console.log(i.nombre)
         await this.router.navigate(['/main']);
         ini++;
         break;
@@ -57,17 +58,16 @@ export class HomePage implements OnInit{
         this.wayDB.fetchUsers().subscribe(item => {
           this.arrayUser = item;
         })
+        this.wayDB.returnUsers();
       }
     })
     
     this.storage.create();
 
-    this.storage.get('user').then(data => {
-      this.inicioToast(data.nombre);
-      
-      return this.router.navigate(['/main']);
-    }).catch(e => {
-      console.log(e)
-    })
+    //this.storage.get('user').then(data => {
+    //  this.wayDB.returnUser(data);
+    //}).catch(e => {
+    //  console.log(e)
+    //})
   }
 }

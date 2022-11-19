@@ -10,7 +10,7 @@
   </div>
   
   <center>
-    <ion-img class="img" src="{{ photo2 }}"></ion-img>
+    <ion-img class="img" src="{{ arrayUser[0].foto }}"></ion-img>
     <ion-icon style="cursor: pointer;" size="x-large" name="create-outline" (click) = "cambiarPhoto()"></ion-icon>
   </center>
 
@@ -23,35 +23,59 @@
       <!-- Nombre de Usuario -->
       <ion-label class="fuente label">Nombre de Usuario</ion-label>
       <div class="div-input">
-        <ion-label class="fuente label">{{ user.username }}</ion-label>
+        <ion-label *ngIf="!varEd; else editusername" class="fuente label">{{ arrayUser[0].username }}</ion-label>
+        <ng-template #editusername>
+          <ion-input class="fuente label" value="{{ arrayUser[0].username }}" id="username"></ion-input>
+        </ng-template>
       </div>
+      
       <!-- Nombre -->
       <ion-label class="fuente label">Nombre</ion-label>
       <div class="div-input">
-        <ion-label class="fuente label">{{ user.nombre }}</ion-label>
+        <ion-label *ngIf="!varEd; else editnombre" class="fuente label">{{ arrayUser[0].nombre }}</ion-label>
+        <ng-template #editnombre>
+          <ion-input class="fuente label" value="{{ arrayUser[0].nombre }}" id="nombre"></ion-input>
+        </ng-template>
       </div>
+      
       <!-- Apellido-->
       <ion-label class="fuente label">Apellido</ion-label>
       <div class="div-input">
-        <ion-label class="fuente label">{{ user.apellido }}</ion-label>
+        <ion-label *ngIf="!varEd; else editapellido" class="fuente label">{{ arrayUser[0].apellido }}</ion-label>
+        <ng-template #editapellido>
+          <ion-input class="fuente label" value="{{ arrayUser[0].apellido }}" id="apellido"></ion-input>
+        </ng-template>
       </div>
+      
       <!-- RUT-->
       <ion-label class="fuente label">RUT</ion-label>
       <div class="div-input">
-        <ion-label class="fuente label">{{ user.rut }}</ion-label>
+        <ion-label *ngIf="!varEd; else editrut" class="fuente label">{{ arrayUser[0].rut }}</ion-label>
+        <ng-template #editrut>
+          <ion-input class="fuente label" value="{{ arrayUser[0].rut }}" id="rut"></ion-input>
+        </ng-template>
       </div>
+      
       <!-- Correo-->
       <ion-label class="fuente label">Correo</ion-label>
       <div class="div-input">
-        <ion-label class="fuente label">{{ user.correo }}</ion-label>
+        <ion-label *ngIf="!varEd; else editcorreo" class="fuente label">{{ arrayUser[0].correo }}</ion-label>
+        <ng-template #editcorreo>
+          <ion-input class="fuente label" value="{{ arrayUser[0].correo }}" id="correo"></ion-input>
+        </ng-template>
       </div>
-      <ion-button class="fuente" style="margin-top: 15px;" fill="outline" color="dark">
+      
+      <ion-button *ngIf="!varEd" class="fuente" style="margin-top: 15px;" fill="outline" color="dark" (click)="switchVarEd(true)">
         <ion-icon name="create"></ion-icon>
         Editar
+      </ion-button>
+      <ion-button *ngIf="varEd" class="fuente" style="margin-top: 15px" fill="outline" color="dark" (click)="editarPerfil()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        Confirmar
       </ion-button>
     </ion-card-content>
   </ion-card>
   <center>
-    <ion-button class="fuente" style="margin-top: 15px;" fill="outline" color="dark" [routerLink] = "['/']">Cambiar Contraseña</ion-button>
+    <ion-button class="fuente" style="margin-top: 15px;" fill="outline" color="dark" [routerLink] = "[]">Cambiar Contraseña</ion-button>
   </center>
 </ion-content>

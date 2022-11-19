@@ -12,7 +12,7 @@ import { wayDBService } from 'src/app/services/way-db.service';
 })
 export class AfilVehPage implements OnInit {
 
-  user: any = {
+  arrayUser: any[] = [{
     id: 0,
     username: '',
     rut: '',
@@ -22,12 +22,11 @@ export class AfilVehPage implements OnInit {
     clave: '',
     foto: '',
     idRol: 0
-  };
+  }];
   arrayMarca: any[] = [{
     idmarca: 0,
     nombreMarca: ''
   }];
-  arrayUser: Usuario[];
 
   //Variables para el Auto
   patente: string;
@@ -36,11 +35,7 @@ export class AfilVehPage implements OnInit {
   annio: number;
   marca: number;
 
-  constructor(private alertController: AlertController, private storage: Storage, private wayDB: wayDBService, private router: Router) { 
-    this.storage.get('user').then(data => {
-      this.user = data;
-    })
-  }
+  constructor(private alertController: AlertController, private storage: Storage, private wayDB: wayDBService, private router: Router) { }
 
   async presentAlert() {
     const alert = await this.alertController.create({
@@ -53,14 +48,14 @@ export class AfilVehPage implements OnInit {
   }
 
   async registrarVeh(){
-    this.wayDB.editarUser(this.user.id, this.user.username, this.user.rut, this.user.nombre, this.user.apellido, this.user.correo, this.user.clave, 1);
+    this.wayDB.editarUserAfil(this.arrayUser[0].id, 1);
 
-    await this.wayDB.agregarAuto(this.patente, this.color, this.modelo, this.annio, this.user.id, this.marca).then(data=>{
+    await this.wayDB.agregarAuto(this.patente, this.color, this.modelo, this.annio, this.arrayUser[0].id, this.marca).then(data=>{
       this.storage.clear()
       this.presentAlert();
       return this.router.navigate(['/']);
     }).catch(e=>{
-      this.wayDB.editarUser(this.user.id, this.user.username, this.user.rut, this.user.nombre, this.user.apellido, this.user.correo, this.user.clave, 0);
+      this.wayDB.editarUserAfil(this.arrayUser[0].id, 0);
 
       console.log("ERROR AGREGARAUTO: "+e);
     });
@@ -75,7 +70,12 @@ export class AfilVehPage implements OnInit {
           this.arrayMarca = item;
         })
       }
+      this.wayDB.returnUsers();
     })
+    this.storage.get('user').then((data) => {
+      this.wayDB.returnUser(data);
+      console.log("PRUEBA STORAGE: "+ data);
+    });
   }
 
 }

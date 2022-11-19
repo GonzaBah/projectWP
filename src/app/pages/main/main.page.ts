@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Usuario } from 'src/app/services/clases/usuario';
+import { wayDBService } from 'src/app/services/way-db.service';
 
 @Component({
   selector: 'app-main',
@@ -8,7 +8,9 @@ import { Usuario } from 'src/app/services/clases/usuario';
   styleUrls: ['./main.page.scss'],
 })
 export class MainPage implements OnInit {
-  user: any = {
+
+  nombre: string = '';
+  arrayUser: any[] = [{
     id: 0,
     username: '',
     rut: '',
@@ -17,13 +19,20 @@ export class MainPage implements OnInit {
     correo: '',
     clave: '',
     idRol: 0
-  };
-  constructor(private storage: Storage) { }
+  }];
+  constructor(private storage: Storage, private wayDB: wayDBService) { }
 
   ngOnInit() {
+    this.wayDB.dbState().subscribe(res => {
+      if (res) {
+        this.wayDB.fetchUsers().subscribe(item => {
+          this.arrayUser = item;
+        })
+      }
+    })
     this.storage.get('user').then((data) => {
-      this.user = data;
-      console.log("PRUEBA STORAGE: "+this.user.idRol);
+      this.wayDB.returnUser(data);
+      console.log("PRUEBA STORAGE: "+ data);
     });
   }
 }

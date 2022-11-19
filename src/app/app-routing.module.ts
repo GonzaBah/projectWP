@@ -42,6 +42,10 @@ const routes: Routes = [
     path: 'afil-veh',
     loadChildren: () => import('./pages/afil-veh/afil-veh.module').then( m => m.AfilVehPageModule)
   },
+  {
+    path: 'ajustes-veh',
+    loadChildren: () => import('./pages/ajustes-veh/ajustes-veh.module').then( m => m.AjustesVehPageModule)
+  },
 
 ];
 

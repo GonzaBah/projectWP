@@ -3,7 +3,7 @@
     <img style="margin-top: 40px; width: 150px;" src="assets\images\logo.png" alt="">
   </center>
   <center>
-    <ion-label class="fuente" style="color: #2b2b2b; font-size: 20px;">¡Bienvenido {{ user.nombre }}!</ion-label>
+    <ion-label class="fuente" style="color: #2b2b2b; font-size: 20px;">¡Bienvenido {{ arrayUser[0].nombre }}!</ion-label>
   </center>
 
     <ion-row style="margin-top:20px">
@@ -58,7 +58,7 @@
 </ion-content>
 
 <!-- Menú de Conductor -->
-<ion-footer *ngIf="user.idRol == 1">
+<ion-footer *ngIf="arrayUser[0].idRol == 1">
   <ion-row style="text-align: center">
     <ion-col style="background-color: #2b2b2b">
       <ion-label class="fuenteM">Conductor</ion-label>

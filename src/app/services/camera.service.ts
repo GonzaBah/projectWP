@@ -10,19 +10,10 @@ import { wayDBService } from './way-db.service';
 })
 export class CameraService {
   foto = new BehaviorSubject([]);
-  arrayUser: Usuario[] = [];
   base64Image: any;
-  constructor(private storage: Storage, private camera: Camera, private wayDB: wayDBService) { 
-    this.wayDB.dbState().subscribe(res => {
-      if (res) {
-        this.wayDB.fetchUsers().subscribe(item => {
-          this.arrayUser = item;
-        })
-      }
-    })
-  }
+  constructor(private storage: Storage, private camera: Camera, private wayDB: wayDBService) { }
 
-  takePicture(){
+  takePicture(id: number){
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -34,6 +25,10 @@ export class CameraService {
       this.base64Image = 'data:image/jpeg;base64,' + imageData;
       console.log("FOTO: " + imageData);
       this.foto.next(this.base64Image);
+      this.wayDB.editarPhoto(id, this.base64Image).then(data => {
+        console.log("FOTO GUARDADA!!!")
+      });
+      
      }, (err) => { 
       console.log('ERROR: '+err);
      });
