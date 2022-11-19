@@ -34,7 +34,8 @@ const routes: Routes = [
   {
     path: 'new-viaje',
     loadChildren: () => import('./pages/new-viaje/new-viaje.module').then( m => m.NewViajePageModule)
-  },  {
+  },
+  {
     path: 'afil-slides',
     loadChildren: () => import('./pages/afil-slides/afil-slides.module').then( m => m.AfilSlidesPageModule)
   },
@@ -45,6 +46,10 @@ const routes: Routes = [
   {
     path: 'ajustes-veh',
     loadChildren: () => import('./pages/ajustes-veh/ajustes-veh.module').then( m => m.AjustesVehPageModule)
+  },
+  {
+    path: 'mapagoogle', component: MapaComponent,
+    loadChildren: () => import('./pages/mapagoogle/mapagoogle.module').then( m => m.MapagooglePageModule)
   },
 
 ];
