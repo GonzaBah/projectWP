@@ -1,18 +1,48 @@
-import {browser, element, by } from 'protractor';
+import {browser, element, by, By } from 'protractor';
 
-describe("Prueba 1", ()=>{
+
+
+describe("Prueba 1 | Mostrar página de iniciar sesión |", ()=>{
     beforeEach(()=>{
-        browser.get("/home");
+        browser.get("/");
     });
 
-    it("El tab 1 se muestra por defecto", ()=>{
-        expect(element(by.css(".tab-select ion-label")).getText()).toContain("Tab 1");
-    });
-
-    it("El usuario selecciona el tab 2", async ()=>{
-        await element(by.css("[tab=tab2]")).click();
-        browser.driver.sleep(500);
-        expect(element(by.css(".tab-select ion-label")).getText()).toContain("Tab 2");
-
+    it("Se muestra la página de iniciar sesión",()=>{
+    expect(element(By.css("ion-button")).getText()).toContain("Entrar");
     });
 });
+
+describe("Prueba 2 | Mostrar home |", ()=>{
+    beforeEach(()=>{
+        browser.get("/main");
+    });
+
+    it("Se muestra el home",()=>{
+    expect(element(By.css('[data-testid="btn1"]')).getText()).toContain("Mi Perfil");
+    });
+});
+
+describe("Prueba 3 | Navegar hacia perfil |", ()=>{
+
+    beforeEach(()=>{
+        browser.get("/main");
+    });
+
+    it("El usuario puede navejar a su perfil",async ()=>{
+        await element(By.css('[data-testid="btn2"]')).click();
+        browser.driver.sleep(20000)
+        expect(element(By.css('[data-testid="btn3"]')).getText()).toContain("Mi Perfil");
+    });
+});
+
+// describe("Prueba 3 | Navegar hacia ajustes |", ()=>{
+//     beforeEach(()=>{
+//         browser.get("/main");
+//     });
+
+//     it("El usuario puede navejar a su perfil",async ()=>{
+//         await element(by.css(".fuenteM"))
+//         expect(element(by.css(".fuente label")).getText()).toContain("Mi Perfil");
+//     });
+// });
+

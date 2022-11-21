@@ -50,9 +50,11 @@ describe('ApiRestService', () => {
   });
 
   it('Llamada de un auto',(done)=>{
+
     service.getAuto('FF-HH-22').subscribe(res=>{
-      expect(res.id_usuario).toEqual(1);
+      expect(res).toHaveSize(1);
       done();
+      console.log(res)
     })
   });
 
