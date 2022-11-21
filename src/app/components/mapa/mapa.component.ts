@@ -36,6 +36,7 @@ export class MapaComponent implements OnInit {
   }];
   arrayViaje: any[] = [{
     idviaje: 0,
+    status: '',
     fechaViaje: '',
     horaSalida: '',
     asientosDisp: 0,
@@ -44,14 +45,7 @@ export class MapaComponent implements OnInit {
     llegada: '',
     patente: '',
   }]
-  arrayAuto: any[] = [{
-    patente: '',
-    color: '',
-    marca: '',
-    modelo: '',
-    annio: 0,
-    idUsuario: 0,
-  }];
+  arrayAuto: any[] = [];
 
   varV: number = 0;
 
@@ -102,11 +96,11 @@ export class MapaComponent implements OnInit {
     })
     await this.storage.get('user').then(async (data) => {
       await this.wayDB.returnUser(data);
-      if(await this.arrayUser[0].idRol == 1){
+      if (await this.arrayUser[0].idRol == 1) {
         await this.wayDB.returnAuto(this.arrayUser[0].id);
       }
     })
-    
+
   }
 
   async ngAfterViewInit() {
@@ -136,7 +130,7 @@ export class MapaComponent implements OnInit {
     } else {
       console.log("navegador no compatible")
     }
-    
+
   };
 
   async presentCom() {
@@ -168,12 +162,14 @@ export class MapaComponent implements OnInit {
             const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
             let dateH = await new Date().getHours();
             let dateM = await new Date().getMinutes();
-            let date: string = await (dateH + ':' +dateM);
+            let date: string = await (dateH + ':' + dateM);
             await this.wayDB.agregarComentario(data.puntaje, data.comentario, this.arrayUser[0].id, this.arrayViaje[0].idviaje).then(async (data) => {
               await sleep(1000);
               this.wayDB.agregarRegistro(date, this.arrayUser[0].id, this.arrayViaje[0].idviaje, this.arrayComentario[0].idCom);
             });
             this.msgToast('¡Viaje Finalizado Con Éxito!');
+            await sleep(200);
+            return this.router.navigate(['/main'])
           }
         }
       ]
@@ -202,8 +198,10 @@ export class MapaComponent implements OnInit {
           text: 'Enviar',
           handler: async (data) => {
             const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-            await this.wayDB.agregarViaje(today, time, 4, data.monto, origen, destino, this.arrayAuto[0].patente);
+            await this.wayDB.agregarViaje('activo', today, time, 4, data.monto, origen, destino, this.arrayAuto[0].patente);
             await sleep(1000);
+            await this.storage.clear();
+            await this.storage.set('user', this.arrayUser[0].id )
             await this.storage.set('viaje', { id: this.arrayViaje[0].idviaje })
             this.varV = 1;
           }
@@ -213,7 +211,7 @@ export class MapaComponent implements OnInit {
     await alert.present();
   }
 
-  async msgToast(msg: string){
+  async msgToast(msg: string) {
     const toast = await this.toastController.create({
       message: msg,
       duration: 1500
@@ -221,18 +219,22 @@ export class MapaComponent implements OnInit {
     toast.present();
   }
 
-  finalizar(){
+  async finalizar() {
     console.log('finalizado');
     this.varV = 0;
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
     this.storage.clear();
     this.storage.set('user', this.arrayUser[0].id);
-    if(this.arrayAuto[0].patente == this.arrayViaje[0].patente){
-      this.msgToast('¡Viaje Finalizado Con Éxito!')
-    }else{
+    if (this.arrayUser[0].idRol == 1 && this.arrayAuto[0].patente == this.arrayViaje[0].patente) {
+      this.msgToast('¡Viaje de Conductor Finalizado!')
+      await this.wayDB.editarStatusViaje(this.arrayViaje[0].idviaje, 'terminado');
+      //await this.wayDB.returnViaje3(this.arrayAuto[0].patente);
+      return this.router.navigate(['/main']);
+    } else {
       this.wayDB.editarStatusDet(this.arrayDetViaje[0].idDet, 'terminado', this.arrayUser[0].id);
+      await sleep(500)
       this.presentCom();
     }
-    return this.router.navigate(['/main'])
   }
   //Recuperar datos del formulario
   onSubmit() {
@@ -245,7 +247,7 @@ export class MapaComponent implements OnInit {
 
     await directionRender.setMap(this.mapa);
 
-    console.log("resultados: "+origen+" ; "+destino)
+    console.log("resultados: " + origen + " ; " + destino)
     directionService.route({
       origin: origen,
       destination: destino,
@@ -260,14 +262,14 @@ export class MapaComponent implements OnInit {
   //calcular ruta
   async mapRuta() {
 
-    let hours = new Date().getHours()+1;
+    let hours = new Date().getHours() + 1;
     let minutes = new Date().getMinutes();
-    let time: string = hours+':'+minutes;
+    let time: string = hours + ':' + minutes;
 
     let todayD = new Date().getDate();
     let todayM = new Date().getMonth();
     let todayY = new Date().getFullYear();
-    let today: string = todayD+'/'+todayM+'/'+todayY;
+    let today: string = todayD + '/' + todayM + '/' + todayY;
 
     const directionService = new google.maps.DirectionsService();
     const directionRender = new google.maps.DirectionsRenderer();
@@ -285,7 +287,7 @@ export class MapaComponent implements OnInit {
       console.log(resultado);
       directionRender.setDirections(resultado);
     });
-    console.log('HOY: '+time+' ; FECHA: '+today)
+    console.log('HOY: ' + time + ' ; FECHA: ' + today)
     await this.presentMonto(today, time, origen, destino);
   }
 
@@ -392,23 +394,23 @@ export class MapaComponent implements OnInit {
     };
     this.mapa = new google.maps.Map(this.renderer.selectRootElement(this.divMap.nativeElement), opciones)
 
-    if (this.storage.get('viaje')){
-      this.storage.get('viaje').then(async (data)=> {
-        if(data.id){
-          const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-          await this.wayDB.returnViaje(data.id);
-          sleep(500);
-          await this.mapRuta2(this.arrayViaje[0].salida, this.arrayViaje[0].llegada);
-          if(this.arrayUser[0].idRol == 2){
-            await this.wayDB.returnDetViaje(this.arrayUser[0].id);
-          }
-          this.varV = 1;
+    this.storage.get('viaje').then(async (data) => {
+      if (data.id) {
+        const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+        await this.wayDB.returnViaje(data.id);
+
+        await sleep(500);
+        await this.mapRuta2(this.arrayViaje[0].salida, this.arrayViaje[0].llegada);
+        if (this.arrayUser[0].idRol == 2) {
+          await this.wayDB.returnDetViaje(this.arrayUser[0].id);
+        } else {
+          await this.wayDB.returnAuto(this.arrayUser[0].id)
         }
-      }).catch(e => {
-        console.log(e)
-      })
-      
-    }
+        this.varV = 1;
+      }
+    }).catch(e => {
+      console.log(e)
+    })
   };
 
 }

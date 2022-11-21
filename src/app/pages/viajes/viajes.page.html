@@ -10,13 +10,13 @@
   </div>
 
   <center style="margin-bottom: 10px">
-    <ion-button fill="outline" color="dark">
+    <ion-button fill="outline" color="dark" (click)="refresh()">
       <ion-icon name="refresh-outline"></ion-icon>
     </ion-button>
   </center>
   <!-- BLOQUE CONDUCTORES-->
   <div *ngFor="let v of arrayViajes">
-    <ion-card (click)="verViaje(v.idviaje, v.patente)">
+    <ion-card *ngIf="v.status == 'activo'" (click)="verViaje(v.idviaje, v.patente)">
       <ion-item>
         <ion-avatar>
           <ion-icon name="location"></ion-icon>

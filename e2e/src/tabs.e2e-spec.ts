@@ -35,6 +35,17 @@ describe("Prueba 3 | Navegar hacia perfil |", ()=>{
     });
 });
 
+describe("Prueba 4 | Volver al Menú Principal desde Ajustes |", () => {
+    beforeEach(()=>{
+        browser.get('/ajustes');
+    });
+
+    it("El usuario puede volver al menú principal", async ()=>{
+        await element(By.id('backButtonFab')).click();
+        browser.driver.sleep(500);
+        expect(element(By.id('menuLabel')).getText()).toContain("Bienvenido");
+    })
+})
 // describe("Prueba 3 | Navegar hacia ajustes |", ()=>{
 //     beforeEach(()=>{
 //         browser.get("/main");

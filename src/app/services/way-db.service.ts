@@ -35,7 +35,7 @@ export class wayDBService {
   tablaUser: string = "create table if not exists usuario(idusuario Integer Primary Key autoincrement, username VARCHAR(20), rut VARCHAR(15) NOT NULL, nombre VARCHAR(50) NOT NULL, apellido VARCHAR(50) NOT NULL, correo VARCHAR(40) NOT NULL, clave VARCHAR(50) NOT NULL, foto BLOB DEFAULT '/assets/images/noperfil.jpg' NOT NULL, id_rol Integer, foreign key(id_rol) references rol(idrol));";
   
   tablaAuto: string = "create table if not exists auto(patente VARCHAR(10) Primary Key, color VARCHAR(20) NOT NULL, marca VARCHAR(40) NOT NULL, modelo VARCHAR(40) NOT NULL, annio Integer NOT NULL, id_usuario Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario));";
-  tablaViaje: string = "create table if not exists viaje(idviaje Integer Primary Key autoincrement, fechaViaje VARCHAR(20) NOT NULL, horaSalida VARCHAR(6) NOT NULL, asientoDisp Integer NOT NULL, monto Integer NOT NULL, salida VARCHAR(30) NOT NULL, llegada VARCHAR(30), patenteAuto VARCHAR(10), foreign key(patenteAuto) references auto(patente));";
+  tablaViaje: string = "create table if not exists viaje(idviaje Integer Primary Key autoincrement, status VARCHAR(20), fechaViaje VARCHAR(20) NOT NULL, horaSalida VARCHAR(6) NOT NULL, asientoDisp Integer NOT NULL, monto Integer NOT NULL, salida VARCHAR(30) NOT NULL, llegada VARCHAR(30), patenteAuto VARCHAR(10), foreign key(patenteAuto) references auto(patente));";
   tablaDetViaje: string = "create table if not exists detalle_viaje(idDetalle Integer Primary Key autoincrement, status VARCHAR(15) NOT NULL, id_usuario Integer NOT NULL, id_viaje Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario), foreign key(id_viaje) references viaje(idviaje));";
   tablaRegistro: string = "create table if not exists registro(idregistro Integer Primary Key autoincrement, horaTermino VARCHAR(10) NOT NULL, id_usuario Integer NOT NULL, id_viaje Integer NOT NULL, id_com Integer NOT NULL, foreign key(id_usuario) references usuario(idusuario), foreign key(id_viaje) references viaje(idviaje), foreign key(id_com) references comentario(idCom));"
   //tablaViajeCom: string = "create table if not exists viajeComuna(id Integer Primary Key autoincrement, id_viaje Integer, id_comuna Integer, foreign key(id_viaje) references viaje(idviaje), foreign key(id_comuna) references comuna(idcomuna));";
@@ -217,6 +217,7 @@ export class wayDBService {
         for (var i = 0; i < res.rows.length; i++) {
           items.push({
             idviaje: res.rows.item(i).idviaje,
+            status: res.rows.item(i).status,
             fechaViaje: res.rows.item(i).fechaViaje,
             horaSalida: res.rows.item(i).horaSalida,
             asientosDisp: res.rows.item(i).asientoDisp,
@@ -237,6 +238,7 @@ export class wayDBService {
         for (var i = 0; i < res.rows.length; i++) {
           items.push({
             idviaje: res.rows.item(i).idviaje,
+            status: res.rows.item(i).status,
             fechaViaje: res.rows.item(i).fechaViaje,
             horaSalida: res.rows.item(i).horaSalida,
             asientosDisp: res.rows.item(i).asientoDisp,
@@ -257,6 +259,28 @@ export class wayDBService {
         for (var i = 0; i < res.rows.length; i++) {
           items.push({
             idviaje: res.rows.item(i).idviaje,
+            status: res.rows.item(i).status,
+            fechaViaje: res.rows.item(i).fechaViaje,
+            horaSalida: res.rows.item(i).horaSalida,
+            asientosDisp: res.rows.item(i).asientoDisp,
+            monto: res.rows.item(i).monto,
+            salida: res.rows.item(i).salida,
+            llegada: res.rows.item(i).llegada,
+            patente: res.rows.item(i).patenteAuto
+          })
+        }
+      }
+      this.Viaje.next(items);
+    })
+  }
+  returnViaje3(patente) {
+    return this.database.executeSql('select * from viaje where patenteAuto = ? and status = "activo"', [patente]).then(res => {
+      let items: Viaje[] = [];
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          items.push({
+            idviaje: res.rows.item(i).idviaje,
+            status: res.rows.item(i).status,
             fechaViaje: res.rows.item(i).fechaViaje,
             horaSalida: res.rows.item(i).horaSalida,
             asientosDisp: res.rows.item(i).asientoDisp,
@@ -340,9 +364,9 @@ export class wayDBService {
       this.listaComentarios.next(items);
     })
   }
-  returnComentario(id, idviaje){
+  returnComentario(id){
     // idCom, puntaje, textoCom, id_usuario
-    return this.database.executeSql('select * from comentario where id_usuario = ? and id_viaje = ?', [id, idviaje]).then(res => {
+    return this.database.executeSql('select * from comentario where idCom = ?', [id]).then(res => {
       let items: any[] = [];
       if (res.rows.length > 0) {
         for (var i = 0; i < res.rows.length; i++) {
@@ -422,10 +446,16 @@ export class wayDBService {
       this.returnDetViaje(idusuario);
     })
   }
-  agregarViaje(fecha, hora, asiento, monto, salida, llegada, patente) {
-    let data = [fecha, hora, asiento, monto, salida, llegada, patente];
-    return this.database.executeSql('insert into viaje(fechaViaje, horaSalida, asientoDisp, monto, salida, llegada, patenteAuto) values(?,?,?,?,?,?,?)', data).then(res => {
+  agregarViaje(status, fecha, hora, asiento, monto, salida, llegada, patente) {
+    let data = [status, fecha, hora, asiento, monto, salida, llegada, patente];
+    return this.database.executeSql('insert into viaje(status, fechaViaje, horaSalida, asientoDisp, monto, salida, llegada, patenteAuto) values(?,?,?,?,?,?,?,?)', data).then(res => {
       this.returnViaje2(patente, fecha, hora);
+    })
+  }
+  editarStatusViaje(id, status){
+    let data = [status, id];
+    return this.database.executeSql('update viaje set status = ? where idviaje = ?', data).then(res => {
+      this.returnViajes;
     })
   }
   deleteViaje(id){
@@ -444,7 +474,7 @@ export class wayDBService {
     // idCom, puntaje, textoCom, id_usuario
     let data = [puntaje, texto, idusuario, idviaje];
     return this.database.executeSql('insert into comentario(puntaje, textoCom, id_usuario, id_viaje) values(?,?,?,?)', data).then(res => {
-      this.returnComentario(idusuario, idviaje);
+      this.returnComentarios(idusuario);
     })
   }
   ApiUser(id, username, rut, nombre, apellido, correo, clave, id_rol){

@@ -24,6 +24,7 @@ export class ViajesPage implements OnInit {
 
   arrayViajes: any[] = [{
     idviaje: 0,
+    status: '',
     fechaViaje: '',
     horaSalida: '',
     asientosDisp: 0,
@@ -34,6 +35,7 @@ export class ViajesPage implements OnInit {
   }];
   arrayViaje: any[] = [{
     idviaje: 0,
+    status: '',
     fechaViaje: '',
     horaSalida: '',
     asientosDisp: 0,
@@ -79,7 +81,9 @@ export class ViajesPage implements OnInit {
         text: 'Empezar',
         handler: async () => {
           // Aqui va el codigo del viaje
+          const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
           await this.wayDB.agregarDetViaje('activo', this.arrayUser[0].id, this.arrayViaje[0].idviaje);
+          await sleep(1500);
           return this.router.navigate(['/mapagoogle']);
         }
       }],
@@ -94,7 +98,7 @@ export class ViajesPage implements OnInit {
     await this.presentConfirm();
   }
   refresh(){
-    
+    this.wayDB.returnViajes();
   }
   async ngOnInit(){
     await this.wayDB.dbState().subscribe(res => {

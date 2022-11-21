@@ -3,7 +3,10 @@
     <img style="margin-top: 40px; width: 150px;" src="assets\images\logo.png" alt="">
   </center>
   <center>
-    <ion-label class="fuente" style="color: #2b2b2b; font-size: 20px;">¡Bienvenido {{ arrayUser[0].nombre }}!</ion-label>
+    <ion-label class="fuente" style="color: #2b2b2b; font-size: 20px;" id="bienvenidaLabel">¡Bienvenido {{ arrayUser[0].nombre }}!</ion-label>
+  </center>
+  <center>
+    <ion-label class="fuenteM" style="color: #2b2b2b; font-size: 20px; margin-top: 10px" id="menuLabel">Menú Principal</ion-label>
   </center>
 
     <ion-row style="margin-top:20px">
@@ -21,7 +24,7 @@
 
       <!-- Icono de Registro -->
       <ion-col size="6">
-        <ion-card style="text-align: center;">
+        <ion-card style="text-align: center;" [routerLink]="['/registro']">
           <ion-card-header>
             <ion-icon name="reader"></ion-icon>
           </ion-card-header>
@@ -65,10 +68,15 @@
     </ion-col>
   </ion-row>
   <ion-row style="text-align: center; background-color: white;">
-    <ion-col [routerLink] = "['/mapagoogle']">
+    <ion-col *ngIf="valid == 0" [routerLink] = "['/mapagoogle']">
       <ion-icon name="add" style="color: #2b2b2b;font-size: 40px; margin-bottom: 0;"></ion-icon>
       <br>
       <ion-label class="fuenteM" style="color: #2b2b2b">Crear Viaje</ion-label>
+    </ion-col>
+    <ion-col *ngIf="valid == 1" (click)="continuar()">
+      <ion-icon name="add" style="color: #2b2b2b;font-size: 40px; margin-bottom: 0;"></ion-icon>
+      <br>
+      <ion-label class="fuenteM" style="color: #2b2b2b">Continuar Viaje</ion-label>
     </ion-col>
   </ion-row>
 </ion-footer>
