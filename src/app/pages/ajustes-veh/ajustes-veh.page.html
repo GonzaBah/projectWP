@@ -1,0 +1,49 @@
+<ion-fab vertical="top" horizontal="">
+  <ion-fab-button [routerLink]="['/main']" color="dark" size="small">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content>
+  <div class="header" style="text-align: center; padding-top: 28px">
+    <ion-label class="fuente label" style="font-size: large; color: black;">Vehículo</ion-label>
+  </div>
+  <ion-card style="margin-top:20px">
+    <ion-card-header style="text-align: center; background-color: #2b2b2b;">
+      <ion-label class="fuenteM" style="color: #ffffff;">Datos del Vehículo</ion-label>
+    </ion-card-header>
+    <ion-card-content style="text-align: center">
+      <ion-label class="fuente label">Marca</ion-label>
+      <div class="div-input">
+        <ion-label *ngIf="varEd">{{ marca }}</ion-label>
+        <ion-select *ngIf="!varEd" placeholder="Selecciona una Marca" id="marcaEd">
+          <ion-select-option *ngFor="let i of arrayMarcas" value="{{ i.idmarca }}">{{ i.nombreMarca }}
+          </ion-select-option>
+        </ion-select>
+      </div>
+      <ion-label class="fuente label">Modelo</ion-label>
+      <div class="div-input">
+        <ion-label *ngIf="varEd" class="fuente label">{{ arrayAuto[0].modelo }}</ion-label>
+        <ion-input *ngIf="!varEd" value="{{ arrayAuto[0].modelo }}" type="text" id="modeloEd"></ion-input>
+      </div>
+      <ion-label class="fuente label">Color</ion-label>
+      <div class="div-input">
+        <ion-label *ngIf="varEd" class="fuente label">{{ arrayAuto[0].color }}</ion-label>
+        <ion-input *ngIf="!varEd" value="{{ arrayAuto[0].color }}" type="text" id="colorEd"></ion-input>
+      </div>
+      <ion-label class="fuente label">Año</ion-label>
+      <div class="div-input">
+        <ion-label *ngIf="varEd" class="fuente label">{{ arrayAuto[0].annio }}</ion-label>
+        <ion-input *ngIf="!varEd" value="{{ arrayAuto[0].annio }}" type="number" id="annioEd"></ion-input>
+      </div>
+      <ion-label class="fuente label">Patente</ion-label>
+      <div class="div-input">
+        <ion-label *ngIf="varEd" class="fuente label">{{ arrayAuto[0].patente }}</ion-label>
+        <ion-input *ngIf="!varEd" value="{{ arrayAuto[0].patente }}" type="text" id="patenteEd"></ion-input>
+      </div>
+      <ion-button color="dark" *ngIf="varEd" (click)="editarVeh()" slot="start" fill="outline" color="dark">Editar Vehiculo</ion-button>
+      <ion-button color="dark" *ngIf="!varEd" (click)="confirmEdit()" slot="start" fill="outline" color="dark">Aplicar</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

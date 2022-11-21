@@ -1,0 +1,56 @@
+<ion-fab vertical="top" horizontal="">
+  <ion-fab-button [routerLink]="['/main']" color="dark" size="small">
+    <ion-icon name="arrow-back"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content>
+  <ion-list style="margin-top: 45px" lines="full" class="ion-no-margin">
+    <center>
+      <ion-label>Agrega un vehículo para registrarte como conductor</ion-label>
+    </center>
+    <ion-card lines="full" class="ion-no.margin">
+      <ion-card-content>
+        <ion-select [(ngModel)]="marca" placeholder="Selecciona una Marca" >
+          <ion-select-option *ngFor="let m of arrayMarca" value="{{ m.idmarca }}">{{ m.nombreMarca }}</ion-select-option>
+        </ion-select>
+      </ion-card-content>
+    </ion-card>
+    <ion-card lines="full" class="ion-no.margin">
+      <ion-card-content>
+        <ion-input [(ngModel)]="modelo" placeholder="Modelo" type="text"></ion-input>
+      </ion-card-content>
+    </ion-card>
+    <ion-card lines="full" class="ion-no.margin">
+      <ion-card-content>
+        <ion-input [(ngModel)]="color" placeholder="Color" type="text"></ion-input>
+      </ion-card-content>
+    </ion-card>
+    <ion-card lines="full" class="ion-no.margin">
+      <ion-card-content>
+        <ion-input [(ngModel)]="annio" placeholder="Año" type="text"></ion-input>
+      </ion-card-content>
+    </ion-card>
+    <ion-card lines="full" class="ion-no.margin">
+      <ion-card-content>
+        <ion-input [(ngModel)]="patente" placeholder="Patente" type="text"></ion-input>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+  
+  <center>
+    <ion-row>
+      <ion-col>
+        <ion-checkbox></ion-checkbox>
+      </ion-col>
+      <ion-col size="10">
+        <ion-label>Aceptar los <a href="">Lineamiento de Conductor</a></ion-label>
+      </ion-col>
+    </ion-row>
+    
+    
+    <br>  
+    <ion-button color="dark" shape="round" (click)="registrarVeh()">Registrar Vehiculo</ion-button>
+  </center>
+  
+</ion-content>

@@ -1,0 +1,21 @@
+:root{
+    --ion-safe-area-top: 20px;
+    --ion-safe-area-bottom: 22px;
+}
+ion-content{
+    ion-label{
+        font-size: medium; 
+        font-family:'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+    }
+    ion-card{
+        border-radius: 40px;
+    }
+    .card1{
+        border-radius: 20px;
+        text-align: center;
+    }
+    ion-input {
+        margin-top: -10px;
+        margin-bottom: -10px;
+    }
+}

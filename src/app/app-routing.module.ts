@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { MapaComponent } from './components/mapa/mapa.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,23 @@ const routes: Routes = [
     path: 'new-viaje',
     loadChildren: () => import('./pages/new-viaje/new-viaje.module').then( m => m.NewViajePageModule)
   },
+  {
+    path: 'afil-slides',
+    loadChildren: () => import('./pages/afil-slides/afil-slides.module').then( m => m.AfilSlidesPageModule)
+  },
+  {
+    path: 'afil-veh',
+    loadChildren: () => import('./pages/afil-veh/afil-veh.module').then( m => m.AfilVehPageModule)
+  },
+  {
+    path: 'ajustes-veh',
+    loadChildren: () => import('./pages/ajustes-veh/ajustes-veh.module').then( m => m.AjustesVehPageModule)
+  },
+  {
+    path: 'mapagoogle', component: MapaComponent,
+    loadChildren: () => import('./pages/mapagoogle/mapagoogle.module').then( m => m.MapagooglePageModule)
+  },
+
 ];
 
 @NgModule({
