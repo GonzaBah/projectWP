@@ -28,9 +28,9 @@ describe("Prueba 3 | Navegar hacia perfil |", ()=>{
         browser.get("/main");
     });
 
-    it("El usuario puede navejar a su perfil",async ()=>{
+    it("El usuario puede navegar a su perfil",async ()=>{
         await element(By.css('[data-testid="btn2"]')).click();
-        browser.driver.sleep(20000)
+        browser.driver.sleep(1000)
         expect(element(By.css('[data-testid="btn3"]')).getText()).toContain("Mi Perfil");
     });
 });
