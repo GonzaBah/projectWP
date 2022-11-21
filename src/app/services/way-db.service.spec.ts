@@ -1,13 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 
-import { WayDBService } from './way-db.service';
+import { wayDBService } from './way-db.service';
 
 describe('WayDBService', () => {
-  let service: WayDBService;
+  let service: wayDBService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(WayDBService);
+    TestBed.configureTestingModule({
+      providers:[SQLite],
+    });
+    service = TestBed.inject(wayDBService);
   });
 
   it('should be created', () => {

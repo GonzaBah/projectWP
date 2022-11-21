@@ -11,13 +11,14 @@ import { MapaComponent } from './components/mapa/mapa.component';
 import { RouterTestingModule } from "@angular/router/testing";
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { Camera } from '@awesome-cordova-plugins/camera/ngx';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 
 @NgModule({
   declarations: [AppComponent, MapaComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ReactiveFormsModule, FormsModule , RouterTestingModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, SQLite, Camera, Geolocation, HttpClient, Storage],
+  imports: [BrowserModule, IonicModule.forRoot(), IonicStorageModule.forRoot(), AppRoutingModule, HttpClientModule, ReactiveFormsModule, FormsModule , RouterTestingModule],
+  providers: [Storage, SQLite, Camera, Geolocation, HttpClient,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

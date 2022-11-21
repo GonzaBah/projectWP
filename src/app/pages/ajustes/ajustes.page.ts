@@ -45,6 +45,19 @@ export class AjustesPage implements OnInit {
 
     await alert.present();
   }
+    //Storage
+
+    async CreateStorage(){
+      await this.storage.create();
+    }
+    async ClearStorage(){
+      await this.storage.clear();
+    }
+    async GetStorage(){
+      await this.storage.get('user');
+    }
+  
+    // fin storage
 
   async presentAfil() {
     const alert = await this.alertController.create({

@@ -34,7 +34,7 @@ export class ApiRestService {
   }
 
   getAuto(id):Observable<any>{
-    return this.http.get(this.apiURL+'/repoListadoAutos/autos/'+id).pipe(
+    return this.http.get(this.apiURL+'/repoListadoAutos/autos/?patente='+id).pipe(
     retry(3)
     );
   }

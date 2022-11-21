@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage-angular';
 import { Auto } from 'src/app/services/clases/auto';
 import { Marca } from 'src/app/services/clases/marca';
 import { wayDBService } from 'src/app/services/way-db.service';
@@ -43,6 +43,20 @@ export class AjustesVehPage implements OnInit {
 
     this.varEd = true;
   }
+
+  //Storage
+
+  async CreateStorage(){
+    await this.storage.create();
+  }
+  async ClearStorage(){
+    await this.storage.clear();
+  }
+  async GetStorage(){
+    await this.storage.get('user');
+  }
+
+  // fin storage
   ngOnInit() {
     this.wayDB.dbState().subscribe(res => {
       if (res) {
