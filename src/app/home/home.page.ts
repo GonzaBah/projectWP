@@ -4,7 +4,6 @@ import { ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { ApiRestService } from '../services/api-rest.service';
 import { wayDBService } from '../services/way-db.service'
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -14,7 +13,17 @@ export class HomePage implements OnInit{
   arrayUser: any[] = [];
   username: any;
   pass: any;
-  constructor(private toastController: ToastController, private router: Router, private api: ApiRestService, private wayDB: wayDBService, private storage: Storage) {
+  constructor(private toastController: ToastController, private router: Router, private api: ApiRestService, private wayDB: wayDBService, private storage: Storage,) {
+  }
+
+  async CreateStorage(){
+    await this.storage.create();
+  }
+  async ClearStorage(){
+    await this.storage.clear();
+  }
+  async GetStorage(){
+    await this.storage.get('user');
   }
 
   async inicioToast(var1: string){
@@ -63,7 +72,6 @@ export class HomePage implements OnInit{
       }
     })
     
-    this.storage.create();
 
     this.api.getUsers().subscribe(async (res) => {
       for (let i of res){
@@ -91,4 +99,6 @@ export class HomePage implements OnInit{
     //  console.log(e)
     //})
   }
+
+
 }
