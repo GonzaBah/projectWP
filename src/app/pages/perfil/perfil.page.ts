@@ -11,6 +11,7 @@ import { wayDBService } from 'src/app/services/way-db.service';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
+  photo: any;
   arrayUser: any[] = [{
     id: 0,
     username: '',
@@ -25,9 +26,8 @@ export class PerfilPage implements OnInit {
 
   varEd: boolean = false;
 
-  constructor(private toastController: ToastController, private alertController: AlertController, private router: Router, private storage: Storage, private wayDB: wayDBService, private camera: CameraService) { 
+  constructor(private toastController: ToastController, private router: Router, private storage: Storage, private wayDB: wayDBService, private camera: CameraService) { 
     
-    console.log("PRUEBA ONINIT: "+JSON.stringify(this.arrayUser[0]));
   }
 
   async msgToast(msg: string){
@@ -37,21 +37,22 @@ export class PerfilPage implements OnInit {
     });
     toast.present();
   }
-  cambiarPhoto() {
-    this.camera.takePicture(this.arrayUser[0].id)
-    
-    this.router.navigate(['/main']).then(e => {
-      return this.router.navigate(['/perfil']);
-    })
+  async cambiarPhoto() {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    await this.camera.takePicture()
+    sleep(1000);
+    await this.wayDB.editarPhoto(this.arrayUser[0].id, this.photo).then(data => {
+      this.msgToast("FOTO GUARDADA!!!")
+    });
   }
   editarPerfil(){
-    let username = document.getElementById('username') as HTMLInputElement;
-    let rut = document.getElementById('rut') as HTMLInputElement;
-    let nombre = document.getElementById('nombre') as HTMLInputElement;
-    let apellido = document.getElementById('apellido') as HTMLInputElement;
-    let correo = document.getElementById('correo') as HTMLInputElement;
+    let username = (document.getElementById('username') as HTMLInputElement).value;
+    let rut = (document.getElementById('rut') as HTMLInputElement).value;
+    let nombre = (document.getElementById('nombre') as HTMLInputElement).value;
+    let apellido = (document.getElementById('apellido') as HTMLInputElement).value;
+    let correo = (document.getElementById('correo') as HTMLInputElement).value;
 
-    this.wayDB.editarUser(this.arrayUser[0].id, username.value, rut.value, nombre.value, apellido.value, correo.value, this.arrayUser[0].clave);
+    this.wayDB.editarUser(this.arrayUser[0].id, username, rut, nombre, apellido, correo, this.arrayUser[0].clave);
     this.msgToast('Confirmado!!');
 
     this.switchVarEd(false);
@@ -60,12 +61,16 @@ export class PerfilPage implements OnInit {
     this.varEd = cond;
   }
   ngOnInit() {
+    this.storage.create();
     this.wayDB.dbState().subscribe(res => {
       if (res) {
         this.wayDB.fetchUsers().subscribe(item => {
           this.arrayUser = item;
         })
       }
+    })
+    this.camera.fetchFoto().subscribe(item => {
+      this.photo = item;
     })
     this.storage.get('user').then(data => {
       this.wayDB.returnUser(data);

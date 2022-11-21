@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { Auto } from 'src/app/services/clases/auto';
-import { Marca } from 'src/app/services/clases/marca';
 import { wayDBService } from 'src/app/services/way-db.service';
 
 @Component({
@@ -12,20 +11,26 @@ import { wayDBService } from 'src/app/services/way-db.service';
 })
 export class AjustesVehPage implements OnInit {
 
-  user: any = {
+  arrayUser: any[] = [{
     id: 0,
-  };
+    username: '',
+    rut: '',
+    nombre: '',
+    apellido: '',
+    correo: '',
+    clave: '',
+    foto: '',
+    idRol: 0,
+  }];
   arrayAuto: any[] = [{
     patente: '',
     color: '',
+    marca: '',
     modelo: '',
     annio: 0,
     idUsuario: 0,
-    idMarca: 0,
   }];
-  arrayMarcas: Marca[];
 
-  marca: string = "";
   varEd: boolean = true;
 
   constructor(private storage: Storage, private router: Router, private wayDB: wayDBService) { }
@@ -39,7 +44,7 @@ export class AjustesVehPage implements OnInit {
     let col = document.getElementById("colorEd") as HTMLInputElement;
     let annio = document.getElementById("annioEd") as HTMLInputElement;
 
-    await this.wayDB.editarAuto(pat.value, col.value, mod.value, parseInt(annio.value), this.user.id, parseInt(mar.value), this.arrayAuto[0].patente);
+    await this.wayDB.editarAuto(pat.value, col.value, mar.value, mod.value, parseInt(annio.value), this.arrayUser[0].id, this.arrayAuto[0].patente);
 
     this.varEd = true;
   }
@@ -48,17 +53,16 @@ export class AjustesVehPage implements OnInit {
       if (res) {
         this.wayDB.fetchAutos().subscribe(item => {
           this.arrayAuto = item;
-        });
-        this.wayDB.fetchMarcas().subscribe(item => {
-          this.arrayMarcas = item;
+        })
+        this.wayDB.fetchUsers().subscribe(item => {
+          this.arrayUser = item;
         })
       }
     })
     this.storage.get('user').then(data => {
       this.wayDB.returnAuto(data);
-      this.user = data;
+      this.wayDB.returnUser(data);
     })
-    this.marca = this.arrayMarcas[this.arrayAuto[0].idMarca].nombreMarca;
   }
 
 }

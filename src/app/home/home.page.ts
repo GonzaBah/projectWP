@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { ApiRestService } from '../services/api-rest.service';
 import { wayDBService } from '../services/way-db.service'
 
 @Component({
@@ -13,7 +14,7 @@ export class HomePage implements OnInit{
   arrayUser: any[] = [];
   username: any;
   pass: any;
-  constructor(private toastController: ToastController, private router: Router, private wayDB: wayDBService, private storage: Storage) {
+  constructor(private toastController: ToastController, private router: Router, private api: ApiRestService, private wayDB: wayDBService, private storage: Storage) {
   }
 
   async inicioToast(var1: string){
@@ -37,11 +38,11 @@ export class HomePage implements OnInit{
     for(let i of this.arrayUser){
       if(this.username == i.username && this.pass == i.clave){
         //LOCAL STORAGE
-        this.storage.set('user', i.id);
-        this.inicioToast(i.nombre);
-        console.log(i.nombre)
+        await this.storage.set('user', i.id);
+        await this.inicioToast(i.nombre);
+        await console.log(i.nombre)
         await this.router.navigate(['/main']);
-        ini++;
+        await ini++;
         break;
       }else{
         console.log("Siguiente Usuario");
@@ -64,6 +65,26 @@ export class HomePage implements OnInit{
     
     this.storage.create();
 
+    this.api.getUsers().subscribe(async (res) => {
+      for (let i of res){
+        await this.wayDB.ApiUser(i.id, i.nombre, '', '', '', '', i.clave, i.id_rol)
+      }
+      console.log(res);
+      console.log(res[0].nombre);
+
+    }, (error) => {
+      console.log(error)
+    });
+
+    this.api.getAutos().subscribe(async (res) => {
+      for (let i of res){
+        await this.wayDB.ApiAuto(i.patente, '', '', i.marca, 0, i.id_usuario)
+      }
+      console.log(res)
+      console.log(res[0].patente)
+    }, (error) => {
+      console.log(error)
+    });
     //this.storage.get('user').then(data => {
     //  this.wayDB.returnUser(data);
     //}).catch(e => {

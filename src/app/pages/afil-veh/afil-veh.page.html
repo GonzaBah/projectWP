@@ -11,9 +11,7 @@
     </center>
     <ion-card lines="full" class="ion-no.margin">
       <ion-card-content>
-        <ion-select [(ngModel)]="marca" placeholder="Selecciona una Marca" >
-          <ion-select-option *ngFor="let m of arrayMarca" value="{{ m.idmarca }}">{{ m.nombreMarca }}</ion-select-option>
-        </ion-select>
+        <ion-input [(ngModel)]="marca" placeholder="Marca" type="text"></ion-input>
       </ion-card-content>
     </ion-card>
     <ion-card lines="full" class="ion-no.margin">

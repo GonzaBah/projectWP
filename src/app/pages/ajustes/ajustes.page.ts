@@ -59,7 +59,7 @@ export class AjustesPage implements OnInit {
       },{
         text: 'Confirmar',
         handler: () => {
-          this.wayDB.editarUserAfil(this.arrayUser[0].id, 0);
+          this.wayDB.editarUserAfil(this.arrayUser[0].id, 2);
           this.wayDB.deleteAutoAfil(this.arrayUser[0].id)
         }
       }],

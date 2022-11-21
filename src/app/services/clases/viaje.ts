@@ -5,5 +5,6 @@ export class Viaje {
     asientosDisp: number;
     monto: number;
     salida: string;
+    llegada: string;
     patente: string;
 }

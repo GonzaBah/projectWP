@@ -1,4 +1,4 @@
-<ion-fab vertical="top" horizontal="">
+<ion-fab *ngIf="varV == 0" vertical="top" horizontal="">
   <ion-fab-button [routerLink]="['/main']" color="dark" size="small">
     <ion-icon name="arrow-back"></ion-icon>
   </ion-fab-button>
@@ -8,16 +8,15 @@
   <div class="formulario">
     <form [formGroup]="formMapas" (ngSubmit)="onSubmit()">
       <div class="input-container">
-        <input type="text" #inputOrigen id="inputOrigen" formControlName="busqueda">
-        <input type="text" #inputDestino id="inputDestino" formControlName="busqueda">
+        <input *ngIf="varV == 0" type="text" #inputOrigen id="inputOrigen" formControlName="busqueda">
+        <input *ngIf="varV == 0" type="text" #inputDestino id="inputDestino" formControlName="busqueda">
 
       </div>
       <div class="mapa" id="divMap" #divMap></div>
     </form>
 
-    <ion-button expand="full" color="dark" class="button-cta" (click)='mapRuta()' type="submit">Comenzar Ruta
-    </ion-button>
-
+    <ion-button *ngIf="varV == 0" size="large" expand="full" fill="outline" color="dark" class="button-cta" (click)='mapRuta()' type="submit">Comenzar Ruta</ion-button>
+    <ion-button *ngIf="varV == 1" size="large" expand="full" fill="outline" color="dark" class="button-cta" (click)='finalizar()'>Finalizar Viaje</ion-button>
   </div>
 
 </ion-content>

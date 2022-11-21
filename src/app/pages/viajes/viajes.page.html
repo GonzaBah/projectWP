@@ -16,10 +16,10 @@
   </center>
   <!-- BLOQUE CONDUCTORES-->
   <div *ngFor="let v of arrayViajes">
-    <ion-card>
+    <ion-card (click)="verViaje(v.idviaje, v.patente)">
       <ion-item>
         <ion-avatar>
-          <ion-img src="assets\images\noperfil.jpg"></ion-img>
+          <ion-icon name="location"></ion-icon>
         </ion-avatar>
         <p class="fuenteS" style="margin-left:10px">
           <label class="fuenteM">{{ v.patente }}</label>
@@ -29,30 +29,5 @@
     </ion-card>
 
   </div>
-  
-
-  <ion-card>
-    <ion-item>
-      <ion-avatar>
-        <ion-img src="assets\images\noperfil.jpg"></ion-img>
-      </ion-avatar>
-      <p class="fuenteS" style="margin-left:10px">
-        <label class="fuenteM">Conductor 2</label>
-        <br>Hora de Salida: HH:MM<br>Toca para ver más información
-      </p>
-    </ion-item>
-  </ion-card>
-
-  <ion-card>
-    <ion-item>
-      <ion-avatar>
-        <ion-img src="assets\images\noperfil.jpg"></ion-img>
-      </ion-avatar>
-      <p class="fuenteS" style="margin-left:10px">
-        <label class="fuenteM">Conductor 3</label>
-        <br>Hora de Salida: HH:MM<br>Toca para ver más información
-      </p>
-    </ion-item>
-  </ion-card>
   
 </ion-content>

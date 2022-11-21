@@ -23,17 +23,13 @@ export class AfilVehPage implements OnInit {
     foto: '',
     idRol: 0
   }];
-  arrayMarca: any[] = [{
-    idmarca: 0,
-    nombreMarca: ''
-  }];
 
   //Variables para el Auto
   patente: string;
   color: string;
   modelo: string;
   annio: number;
-  marca: number;
+  marca: string;
 
   constructor(private alertController: AlertController, private storage: Storage, private wayDB: wayDBService, private router: Router) { }
 
@@ -55,7 +51,7 @@ export class AfilVehPage implements OnInit {
       this.presentAlert();
       return this.router.navigate(['/']);
     }).catch(e=>{
-      this.wayDB.editarUserAfil(this.arrayUser[0].id, 0);
+      this.wayDB.editarUserAfil(this.arrayUser[0].id, 2);
 
       console.log("ERROR AGREGARAUTO: "+e);
     });
@@ -65,9 +61,6 @@ export class AfilVehPage implements OnInit {
       if (res) {
         this.wayDB.fetchUsers().subscribe(item => {
           this.arrayUser = item;
-        })
-        this.wayDB.fetchMarcas().subscribe(item => {
-          this.arrayMarca = item;
         })
       }
       this.wayDB.returnUsers();

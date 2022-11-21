@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { WayDBService } from './way-db.service';
+import { wayDBService } from './way-db.service';
 
 describe('WayDBService', () => {
-  let service: WayDBService;
+  let service: wayDBService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(WayDBService);
+    service = TestBed.inject(wayDBService);
   });
 
   it('should be created', () => {

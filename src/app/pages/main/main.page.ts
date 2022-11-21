@@ -22,15 +22,15 @@ export class MainPage implements OnInit {
   }];
   constructor(private storage: Storage, private wayDB: wayDBService) { }
 
-  ngOnInit() {
-    this.wayDB.dbState().subscribe(res => {
+  async ngOnInit() {
+    await this.wayDB.dbState().subscribe(res => {
       if (res) {
         this.wayDB.fetchUsers().subscribe(item => {
           this.arrayUser = item;
         })
       }
     })
-    this.storage.get('user').then((data) => {
+    await this.storage.get('user').then((data) => {
       this.wayDB.returnUser(data);
       console.log("PRUEBA STORAGE: "+ data);
     });
