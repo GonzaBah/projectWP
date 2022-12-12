@@ -10,6 +10,7 @@ import { wayDBService } from '../services/way-db.service'
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit{
+  cargar: boolean = false;
   arrayUser: any[] = [];
   username: any;
   pass: any;
@@ -43,8 +44,11 @@ export class HomePage implements OnInit{
   }
 
   async login() {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    this.cargar = true;
     let ini = 0;
     for(let i of this.arrayUser){
+      await sleep(1500);
       if(this.username == i.username && this.pass == i.clave){
         //LOCAL STORAGE
         await this.storage.set('user', i.id);
@@ -52,6 +56,7 @@ export class HomePage implements OnInit{
         await console.log(i.nombre)
         await this.router.navigate(['/main']);
         await ini++;
+        this.cargar = false;
         break;
       }else{
         console.log("Siguiente Usuario");

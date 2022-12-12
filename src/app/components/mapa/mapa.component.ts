@@ -3,7 +3,7 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { wayDBService } from 'src/app/services/way-db.service';
 
@@ -61,7 +61,7 @@ export class MapaComponent implements OnInit {
   destino: {};
 
 
-  constructor(private toastController: ToastController, private alertController: AlertController, private storage: Storage, private renderer: Renderer2, private wayDB: wayDBService, private router: Router) {
+  constructor(private toastController: ToastController, private loadController: LoadingController, private alertController: AlertController, private storage: Storage, private renderer: Renderer2, private wayDB: wayDBService, private router: Router) {
     this.formMapas = new FormGroup({
 
       busqueda: new FormControl(''),
@@ -199,11 +199,11 @@ export class MapaComponent implements OnInit {
           handler: async (data) => {
             const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
             await this.wayDB.agregarViaje('activo', today, time, 4, data.monto, origen, destino, this.arrayAuto[0].patente);
-            await sleep(1000);
+            await sleep(1500);
             await this.storage.clear();
-            await this.storage.set('user', this.arrayUser[0].id )
+            await this.storage.set('user', this.arrayUser[0].id)
             await this.storage.set('viaje', { id: this.arrayViaje[0].idviaje })
-            this.varV = 1;
+            this.varV = await 1;
           }
         }
       ]
@@ -218,22 +218,29 @@ export class MapaComponent implements OnInit {
     });
     toast.present();
   }
-
+  async loadCargando(msg){
+    const load = await this.loadController.create({
+      message: "<ion-label class='fuente'>"+msg+"</ion-label>",
+      duration: 3000,
+      spinner: 'circles',
+    })
+    load.present();
+  }
   async finalizar() {
     console.log('finalizado');
-    this.varV = 0;
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-    this.storage.clear();
-    this.storage.set('user', this.arrayUser[0].id);
+    await this.storage.clear();
+    await this.storage.set('user', this.arrayUser[0].id);
     if (this.arrayUser[0].idRol == 1 && this.arrayAuto[0].patente == this.arrayViaje[0].patente) {
-      this.msgToast('¡Viaje de Conductor Finalizado!')
+      await this.loadCargando("Finalizando Viaje...");
       await this.wayDB.editarStatusViaje(this.arrayViaje[0].idviaje, 'terminado');
+      this.msgToast('¡Viaje de Conductor Finalizado!');
       //await this.wayDB.returnViaje3(this.arrayAuto[0].patente);
       return this.router.navigate(['/main']);
     } else {
-      this.wayDB.editarStatusDet(this.arrayDetViaje[0].idDet, 'terminado', this.arrayUser[0].id);
-      await sleep(500)
-      this.presentCom();
+      await this.loadCargando("Finalizando Viaje...");
+      await this.wayDB.editarStatusDet(this.arrayDetViaje[0].idDet, 'terminado', this.arrayUser[0].id);
+      await this.presentCom();
+      return this.router.navigate(['/main']);
     }
   }
   //Recuperar datos del formulario
@@ -384,7 +391,7 @@ export class MapaComponent implements OnInit {
 
   //Cargar Mapa
 
-  cargarMapa(position: any): any {
+  async cargarMapa(position: any) {
 
     const opciones = {
       center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
@@ -393,13 +400,11 @@ export class MapaComponent implements OnInit {
 
     };
     this.mapa = new google.maps.Map(this.renderer.selectRootElement(this.divMap.nativeElement), opciones)
-
+    await this.loadCargando("Cargando Mapa...");
     this.storage.get('viaje').then(async (data) => {
       if (data.id) {
-        const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
         await this.wayDB.returnViaje(data.id);
-
-        await sleep(500);
+        await this.loadCargando("Viaje detectado...");
         await this.mapRuta2(this.arrayViaje[0].salida, this.arrayViaje[0].llegada);
         if (this.arrayUser[0].idRol == 2) {
           await this.wayDB.returnDetViaje(this.arrayUser[0].id);

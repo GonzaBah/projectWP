@@ -11,7 +11,7 @@ import { wayDBService } from 'src/app/services/way-db.service';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
-  photo: any;
+  photo: any = '';
   arrayUser: any[] = [{
     id: 0,
     username: '',
@@ -26,7 +26,7 @@ export class PerfilPage implements OnInit {
 
   varEd: boolean = false;
 
-  constructor(private toastController: ToastController, private router: Router, private storage: Storage, private wayDB: wayDBService, private camera: CameraService) { 
+  constructor(private alertController: AlertController, private toastController: ToastController, private router: Router, private storage: Storage, private wayDB: wayDBService, private camera: CameraService) { 
     
   }
 
@@ -37,13 +37,31 @@ export class PerfilPage implements OnInit {
     });
     toast.present();
   }
-  async cambiarPhoto() {
+  async alertCargando(){
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-    await this.camera.takePicture()
-    sleep(1000);
+    const alert = await this.alertController.create({
+      message: "<div><ion-label style='text-align: center'>Cargando...</ion-label></div>"
+    })
+    alert.present();
+    await sleep(1000);
     await this.wayDB.editarPhoto(this.arrayUser[0].id, this.photo).then(data => {
       this.msgToast("FOTO GUARDADA!!!")
     });
+    await sleep(2000);
+    await this.wayDB.returnUser(this.arrayUser[0].id);
+    alert.dismiss();
+  }
+  async cambiarPhoto() {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    await this.camera.takePicture();
+    await sleep(5000);
+    console.log(JSON.stringify(this.photo));
+    if (this.photo == 'No Image Selected'){
+      console.log('No hay');
+    }else{
+      await this.alertCargando();
+    }
+    
   }
   editarPerfil(){
     let username = (document.getElementById('username') as HTMLInputElement).value;
@@ -54,7 +72,7 @@ export class PerfilPage implements OnInit {
 
     this.wayDB.editarUser(this.arrayUser[0].id, username, rut, nombre, apellido, correo, this.arrayUser[0].clave);
     this.msgToast('Confirmado!!');
-
+    
     this.switchVarEd(false);
   }
   switchVarEd(cond){

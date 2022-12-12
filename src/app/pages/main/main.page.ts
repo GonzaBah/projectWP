@@ -64,13 +64,15 @@ export class MainPage implements OnInit {
     if (this.arrayUser[0].idRol == 1) {
       await this.wayDB.returnAuto(this.arrayUser[0].id);
       await sleep(1000);
-      await this.wayDB.returnViaje3(this.arrayAuto[0].patente);
-      console.log("PRUEBA VIAJE: "+this.arrayViaje[0].status);
-      if (this.arrayViaje[0].status == "activo") {
-        this.valid = 1;
-      } else {
-        this.valid = 0;
-      }
+      await this.wayDB.returnViaje3(this.arrayAuto[0].patente).then(res => {
+        if (this.arrayViaje[0].status == "activo") {
+          this.valid = 1;
+        } else {
+          this.valid = 0;
+        }
+      }).catch(e => {
+        console.log("No hay ningún viaje en proceso");
+      });
     }
   }
 }

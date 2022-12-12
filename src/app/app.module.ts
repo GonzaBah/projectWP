@@ -13,11 +13,14 @@ import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { Camera } from '@awesome-cordova-plugins/camera/ngx';
 import { Storage } from '@ionic/storage-angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressBarModule } from '@angular/material/progress-bar'
 
 
 @NgModule({
   declarations: [AppComponent, MapaComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), IonicStorageModule.forRoot(), AppRoutingModule, HttpClientModule, ReactiveFormsModule, FormsModule , RouterTestingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), IonicStorageModule.forRoot(), AppRoutingModule, HttpClientModule, ReactiveFormsModule, FormsModule , RouterTestingModule, MatProgressBarModule, MatProgressSpinnerModule, BrowserAnimationsModule],
   providers: [Storage, SQLite, Camera, Geolocation, HttpClient,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

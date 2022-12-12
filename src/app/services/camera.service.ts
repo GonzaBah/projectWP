@@ -25,6 +25,7 @@ export class CameraService {
       this.foto.next(this.base64Image);
      }, (err) => { 
       console.log('ERROR: '+err);
+      this.foto.next(err);
      });
   }
   fetchFoto(): Observable<any>{

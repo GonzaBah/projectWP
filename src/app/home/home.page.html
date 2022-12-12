@@ -10,5 +10,8 @@
       <div class='test' style="padding-top: 10%;">
         <ion-button data-testid="btn-1" fill="outline" color="dark" size="default" (click) = "login()">Entrar</ion-button>
       </div>
+      <div>
+        <mat-progress-bar *ngIf="cargar == true" mode="indeterminate"></mat-progress-bar>
+      </div>
   </div>
 </ion-content>
