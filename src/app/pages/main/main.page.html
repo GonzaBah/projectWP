@@ -64,19 +64,14 @@
 <ion-footer *ngIf="cond == 1">
   <ion-row style="text-align: center">
     <ion-col style="background-color: #2b2b2b">
-      <ion-label class="fuenteM">Conductor</ion-label>
+      <ion-label class="fuenteM">WayDriver</ion-label>
     </ion-col>
   </ion-row>
   <ion-row style="text-align: center; background-color: white;">
-    <ion-col *ngIf="valid == 0" [routerLink] = "['/mapagoogle']">
+    <ion-col [routerLink] = "['/mapagoogle']">
       <ion-icon name="add" style="color: #2b2b2b;font-size: 40px; margin-bottom: 0;"></ion-icon>
       <br>
-      <ion-label class="fuenteM" style="color: #2b2b2b">Crear Viaje</ion-label>
-    </ion-col>
-    <ion-col *ngIf="valid == 1" (click)="continuar()">
-      <ion-icon name="add" style="color: #2b2b2b;font-size: 40px; margin-bottom: 0;"></ion-icon>
-      <br>
-      <ion-label class="fuenteM" style="color: #2b2b2b">Continuar Viaje</ion-label>
+      <ion-label class="fuenteM" style="color: #2b2b2b">Viaje Conductor</ion-label>
     </ion-col>
   </ion-row>
 </ion-footer>

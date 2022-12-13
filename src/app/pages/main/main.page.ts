@@ -39,17 +39,17 @@ export class MainPage implements OnInit {
   valid: number = 0;
   constructor(private loadController: LoadingController, private storage: Storage, private wayDB: wayDBService, private router: Router) { }
 
-  async loadCargando(msg){
+  async loadCargando(msg, time){
     const load = await this.loadController.create({
       message: "<ion-label class='fuente'>"+msg+"</ion-label>",
-      duration: 3000,
+      duration: time,
       spinner: 'circles',
     })
     await load.present();
   }
 
   async abrirViaje(){
-    await this.loadCargando("Buscando Viaje en curso...")
+    await this.loadCargando("Buscando Viaje en curso...", 1000)
     await this.storage.get('viaje').then(async (data) => {
       if(data.id){
         return this.router.navigate(['/mapagoogle']);
@@ -64,10 +64,7 @@ export class MainPage implements OnInit {
     })
     
   }
-  continuar() {
-    this.storage.set('viaje', { id: this.arrayViaje[0].idviaje });
-    return this.router.navigate(['/mapagoogle']);
-  }
+
   async ngOnInit() {
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
     await this.wayDB.dbState().subscribe(res => {
@@ -86,18 +83,17 @@ export class MainPage implements OnInit {
         })
       }
     })
-    await sleep(1000);
-    await this.loadCargando("Espere un momento...");
+    await sleep(500);
     await this.storage.get('user').then(async (data) => {
+      await this.loadCargando("Espere un momento...", 1500);
       if(data){
         await this.wayDB.returnUser(data).then(async (res) => {
+          await sleep(800);
           if (await this.arrayUser[0].idRol == 1) {
-            await sleep(1000);
-            await this.wayDB.returnAuto(data);
             this.cond = 1;
+            await this.wayDB.returnAuto(data);
             await this.wayDB.returnViaje3(this.arrayAuto[0].patente).then(res2 => {
               this.storage.set('viaje', { id: this.arrayViaje[0].idviaje })
-              this.valid = 1;
             }).catch(e => {
               console.log("No hay ningún viaje en proceso");
             });

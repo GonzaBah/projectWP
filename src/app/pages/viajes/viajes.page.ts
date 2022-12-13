@@ -60,10 +60,10 @@ export class ViajesPage implements OnInit {
   }]
   constructor(private loadController: LoadingController, private alertController: AlertController, private storage: Storage, private wayDB: wayDBService, private router: Router) { }
   
-  async loadCargando(msg){
+  async loadCargando(msg, time){
     const load = await this.loadController.create({
       message: "<ion-label class='fuente'>"+msg+"</ion-label>",
-      duration: 2000,
+      duration: time,
       spinner: 'circles',
     })
     await load.present();
@@ -92,9 +92,9 @@ export class ViajesPage implements OnInit {
           // Aqui va el codigo del viaje
           const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
           await this.wayDB.agregarDetViaje('activo', this.arrayUser[0].id, this.arrayViaje[0].idviaje);
-          await this.loadCargando("Espere un momento...")
+          await this.loadCargando("Espere un momento...", 1500)
           await this.storage.set('viaje', { id: this.arrayViaje[0].idviaje })
-          await sleep(1000);
+          await sleep(500);
           return await this.router.navigate(['/mapagoogle']);
         }
       }],
@@ -109,7 +109,7 @@ export class ViajesPage implements OnInit {
     await this.presentConfirm();
   }
   async refresh(){
-    await this.loadCargando("Buscando Viajes...")
+    await this.loadCargando("Buscando Viajes...", 500)
     await this.wayDB.returnViajes();
   }
   async ngOnInit(){
@@ -132,6 +132,7 @@ export class ViajesPage implements OnInit {
         })
       }
     })
+    await this.refresh();
     await this.storage.get('user').then(data => {
       this.wayDB.returnUser(data);
     })

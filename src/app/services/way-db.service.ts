@@ -215,7 +215,7 @@ export class wayDBService {
     })
   }
   returnViajes() {
-    return this.database.executeSql('select * from viaje', []).then(res => {
+    return this.database.executeSql('select * from viaje where status = "activo"', []).then(res => {
       let items: Viaje[] = [];
       if (res.rows.length > 0) {
         for (var i = 0; i < res.rows.length; i++) {
@@ -299,7 +299,7 @@ export class wayDBService {
     })
   }
   returnDetViaje(id) {
-    return this.database.executeSql('select * from detalle_viaje where id_usuario = ? and status = "activo"', [id]).then(res => {
+    return this.database.executeSql('select detalle_viaje.idDetalle, detalle_viaje.status, detalle_viaje.id_usuario, detalle_viaje.id_viaje from detalle_viaje inner join viaje on detalle_viaje.id_viaje = viaje.idviaje where detalle_viaje.id_usuario = ? and detalle_viaje.status = "activo" and viaje.status = "activo"', [id]).then(res => {
       let items: DetViaje[] = [];
       if (res.rows.length > 0) {
         for (var i = 0; i < res.rows.length; i++) {
@@ -315,7 +315,7 @@ export class wayDBService {
     })
   }
   returnDetViaje2(id) {
-    return this.database.executeSql('select usuario.username from detalle_viaje inner join usuario on usuario.idusuario = detalle_viaje.id_usuario where detalle_viaje.status = "activo"', []).then(res => {
+    return this.database.executeSql('select usuario.username from detalle_viaje inner join usuario on usuario.idusuario = detalle_viaje.id_usuario where detalle_viaje.id_viaje = ? and detalle_viaje.status = "activo"', [id]).then(res => {
       let items: any[] = [];
       if (res.rows.length > 0) {
         for (var i = 0; i < res.rows.length; i++) {

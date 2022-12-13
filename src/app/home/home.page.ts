@@ -55,7 +55,7 @@ export class HomePage implements OnInit{
     this.cargar = true;
     let ini = 0;
     for(let i of this.arrayUser){
-      await sleep(1500);
+      await sleep(1000);
       if(this.username == i.username && this.pass == i.clave){
         //LOCAL STORAGE
         await this.storage.set('user', i.id);
@@ -71,6 +71,7 @@ export class HomePage implements OnInit{
     }
     if (ini == 0){
       this.errorToast();
+      this.cargar = false;
     }
   }
 
