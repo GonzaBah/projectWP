@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { CameraService } from 'src/app/services/camera.service';
 import { wayDBService } from 'src/app/services/way-db.service';
@@ -11,7 +11,7 @@ import { wayDBService } from 'src/app/services/way-db.service';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
-  photo: any = '';
+  photo: any = 'No Image Selected';
   arrayUser: any[] = [{
     id: 0,
     username: '',
@@ -26,7 +26,7 @@ export class PerfilPage implements OnInit {
 
   varEd: boolean = false;
 
-  constructor(private alertController: AlertController, private toastController: ToastController, private router: Router, private storage: Storage, private wayDB: wayDBService, private camera: CameraService) { 
+  constructor(private loadController: LoadingController, private alertController: AlertController, private toastController: ToastController, private router: Router, private storage: Storage, private wayDB: wayDBService, private camera: CameraService) { 
     
   }
 
@@ -37,29 +37,29 @@ export class PerfilPage implements OnInit {
     });
     toast.present();
   }
-  async alertCargando(){
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-    const alert = await this.alertController.create({
-      message: "<div><ion-label style='text-align: center'>Cargando...</ion-label></div>"
+  async loadCargando(msg){
+    const load = await this.loadController.create({
+      message: "<ion-label class='fuente'>"+msg+"</ion-label>",
+      duration: 2000,
+      spinner: 'circles',
     })
-    alert.present();
-    await sleep(1000);
-    await this.wayDB.editarPhoto(this.arrayUser[0].id, this.photo).then(data => {
-      this.msgToast("FOTO GUARDADA!!!")
-    });
-    await sleep(2000);
-    await this.wayDB.returnUser(this.arrayUser[0].id);
-    alert.dismiss();
+    load.present();
   }
   async cambiarPhoto() {
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
     await this.camera.takePicture();
-    await sleep(5000);
+    await sleep(1000);
+    await this.loadCargando("Espere un momento...");
     console.log(JSON.stringify(this.photo));
-    if (this.photo == 'No Image Selected'){
+    if (this.photo == 'No Image Selected' || this.photo == this.arrayUser[0].foto){
       console.log('No hay');
     }else{
-      await this.alertCargando();
+      await this.loadCargando("Subiendo Foto...");
+      await this.wayDB.editarPhoto(this.arrayUser[0].id, this.photo).then(data => {
+        this.msgToast("FOTO GUARDADA!!!")
+      });
+      await sleep(2000);
+      await this.wayDB.returnUser(this.arrayUser[0].id);
     }
     
   }

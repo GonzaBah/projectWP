@@ -5,25 +5,26 @@
 </ion-fab>
 
 <ion-content class="container" [fullscreen]="true">
+  <div class="header" style="text-align: center; padding-top: 28px">
+    <ion-label class="fuente" style="font-size: large; color: black;">Viaje</ion-label>
+  </div>
   <div class="formulario">
     <form [formGroup]="formMapas" (ngSubmit)="onSubmit()">
-      <div class="input-container" *ngIf="varV == 0">
-        <div class="header" style="text-align: center; padding-top: 28px">
-          <ion-label data-testid="btn-3" type="perfil2" class="fuentelabel" style="font-size: large; color: black;">Crear Viaje</ion-label>
+      <ion-card class="oriDes" *ngIf="varV == 0">
+        <div>
+          <label for="inputOrigen">Desde</label>
+          <input type="text" #inputOrigen id="inputOrigen" formControlName="busqueda">
+          <label for="inputDestino">Hasta</label>
+          <input type="text" #inputDestino id="inputDestino" formControlName="busqueda">
         </div>
-        <input type="text" #inputOrigen id="inputOrigen" formControlName="busqueda">
-        <input type="text" #inputDestino id="inputDestino" formControlName="busqueda">
-      </div>
-      <div class="container fuente" *ngIf="varV == 1" style="text-align: center; font-size: 30px; margin-top: 25px; margin-bottom: 25px">
-        <div class="header" style="text-align: center; padding-top: 28px">
-          <ion-label data-testid="btn-3" type="perfil2" class="fuentelabel" style="font-size: large; color: black;">Viaje en Progreso</ion-label>
-        </div>
-      </div>
-      <div class="mapa" id="divMap" #divMap></div>
+      </ion-card>
+      <ion-card>
+        <div class="mapa" id="divMap" #divMap></div>
+      </ion-card>
     </form>
 
     <ion-button *ngIf="varV == 0" size="medium" expand="full" fill="outline" color="dark" class="button-cta" (click)='mapRuta()' type="submit">Comenzar Ruta</ion-button>
-    <ion-button *ngIf="varV == 1 && arrayUser[0].idRol == 1" size="medium" expand="full" fill="outline" color="dark" class="button-cta" (click)='asientos()'>Asientos</ion-button>
+    <ion-button *ngIf="varV == 1 && arrayUser[0].idRol == 1" size="medium" expand="full" fill="outline" color="dark" class="button-cta" (click)='asientosDisp()'>Asientos</ion-button>
     <ion-button *ngIf="varV == 1" size="medium" expand="full" fill="outline" color="dark" class="button-cta" (click)='finalizar()'>Finalizar Viaje</ion-button>
   </div>
 

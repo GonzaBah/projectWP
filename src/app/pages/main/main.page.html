@@ -12,7 +12,7 @@
     <ion-row style="margin-top:20px">
       <!-- Icono de Viajes -->
       <ion-col size="6">
-        <ion-card style="text-align: center;" [routerLink]="['/viajes']">
+        <ion-card style="text-align: center;" (click)="abrirViaje()">
           <ion-card-header>
             <ion-icon name="map"></ion-icon>
           </ion-card-header>
@@ -61,7 +61,7 @@
 </ion-content>
 
 <!-- Menú de Conductor -->
-<ion-footer *ngIf="arrayUser[0].idRol == 1">
+<ion-footer *ngIf="cond == 1">
   <ion-row style="text-align: center">
     <ion-col style="background-color: #2b2b2b">
       <ion-label class="fuenteM">Conductor</ion-label>

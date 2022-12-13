@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { wayDBService } from 'src/app/services/way-db.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 
@@ -58,7 +58,16 @@ export class ViajesPage implements OnInit {
     annio: 0,
     idUsuario: 0,
   }]
-  constructor(private alertController: AlertController, private storage: Storage, private wayDB: wayDBService, private router: Router) { }
+  constructor(private loadController: LoadingController, private alertController: AlertController, private storage: Storage, private wayDB: wayDBService, private router: Router) { }
+  
+  async loadCargando(msg){
+    const load = await this.loadController.create({
+      message: "<ion-label class='fuente'>"+msg+"</ion-label>",
+      duration: 2000,
+      spinner: 'circles',
+    })
+    await load.present();
+  }
 
   async presentConfirm() {
     const alert = await this.alertController.create({
@@ -74,7 +83,7 @@ export class ViajesPage implements OnInit {
       buttons: [{
         text: 'Cancelar',
         role: 'cancel',
-        handler: () => {
+        handler: async () => {
           console.log('Cancelado');
         }
       },{
@@ -83,8 +92,10 @@ export class ViajesPage implements OnInit {
           // Aqui va el codigo del viaje
           const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
           await this.wayDB.agregarDetViaje('activo', this.arrayUser[0].id, this.arrayViaje[0].idviaje);
-          await sleep(1500);
-          return this.router.navigate(['/mapagoogle']);
+          await this.loadCargando("Espere un momento...")
+          await this.storage.set('viaje', { id: this.arrayViaje[0].idviaje })
+          await sleep(1000);
+          return await this.router.navigate(['/mapagoogle']);
         }
       }],
     });
@@ -97,8 +108,9 @@ export class ViajesPage implements OnInit {
     await this.wayDB.returnAutoViaje(patente);
     await this.presentConfirm();
   }
-  refresh(){
-    this.wayDB.returnViajes();
+  async refresh(){
+    await this.loadCargando("Buscando Viajes...")
+    await this.wayDB.returnViajes();
   }
   async ngOnInit(){
     await this.wayDB.dbState().subscribe(res => {
@@ -123,11 +135,6 @@ export class ViajesPage implements OnInit {
     await this.storage.get('user').then(data => {
       this.wayDB.returnUser(data);
     })
-    await this.wayDB.returnDetViaje(this.arrayUser[0].id)
-    if (this.arrayDetViaje[0]){
-      this.storage.set('viaje', { id: this.arrayDetViaje[0].idviaje});
-      return this.router.navigate(['/mapagoogle']);
-    }
   }
 
 }

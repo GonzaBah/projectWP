@@ -25,6 +25,7 @@ export class wayDBService {
   listaMarcas = new BehaviorSubject([]);
   listaViajes = new BehaviorSubject([]);
   Viaje = new BehaviorSubject([]);
+  Asientos = new BehaviorSubject([]);
   listaDetViaje = new BehaviorSubject([]);
   listaRegistros = new BehaviorSubject([]);
   listaComentarios = new BehaviorSubject([]);
@@ -70,6 +71,9 @@ export class wayDBService {
   }
   fetchViaje(): Observable<Viaje[]> {
     return this.Viaje.asObservable();
+  }
+  fetchAsientos(): Observable<any[]> {
+    return this.Asientos.asObservable();
   }
   fetchDetViaje(): Observable<DetViaje[]> {
     return this.listaDetViaje.asObservable();
@@ -308,6 +312,19 @@ export class wayDBService {
         }
       }
       this.listaDetViaje.next(items);
+    })
+  }
+  returnDetViaje2(id) {
+    return this.database.executeSql('select usuario.username from detalle_viaje inner join usuario on usuario.idusuario = detalle_viaje.id_usuario where detalle_viaje.status = "activo"', []).then(res => {
+      let items: any[] = [];
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          items.push({
+            username: res.rows.item(i).username,
+          })
+        }
+      }
+      this.Asientos.next(items);
     })
   }
   returnRegistros(){

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { ApiRestService } from '../services/api-rest.service';
 import { wayDBService } from '../services/way-db.service'
@@ -14,7 +14,7 @@ export class HomePage implements OnInit{
   arrayUser: any[] = [];
   username: any;
   pass: any;
-  constructor(private toastController: ToastController, private router: Router, private api: ApiRestService, private wayDB: wayDBService, private storage: Storage,) {
+  constructor(private loadController: LoadingController, private toastController: ToastController, private router: Router, private api: ApiRestService, private wayDB: wayDBService, private storage: Storage,) {
   }
 
   async CreateStorage(){
@@ -26,7 +26,14 @@ export class HomePage implements OnInit{
   async GetStorage(){
     await this.storage.get('user');
   }
-
+  async loadCargando(msg){
+    const load = await this.loadController.create({
+      message: "<ion-label class='fuente'>"+msg+"</ion-label>",
+      duration: 3000,
+      spinner: 'circles',
+    })
+    load.present();
+  }
   async inicioToast(var1: string){
     const toast = await this.toastController.create({
       message: 'Bienvenido ' + var1,
@@ -98,6 +105,15 @@ export class HomePage implements OnInit{
     }, (error) => {
       console.log(error)
     });
+    this.storage.get('user').then(async (data) => {
+      if (data) {
+        await this.loadCargando("Iniciando Sesión...");
+        await console.log("hola: "+ data);
+        return await this.router.navigate(['/main']);
+      }
+    }).catch(e => {
+      console.log(e)
+    })
     //this.storage.get('user').then(data => {
     //  this.wayDB.returnUser(data);
     //}).catch(e => {
