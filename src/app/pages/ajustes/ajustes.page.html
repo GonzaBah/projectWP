@@ -17,26 +17,26 @@
         <ion-icon name="moon"></ion-icon>
         <p>Modo Oscuro</p>
       </ion-button>
-      <ion-button class="fuente" expand="block" fill="outline" color="dark">
+      <ion-button *ngIf="arrayUser[0].idRol == 0" class="fuente" expand="block" fill="outline" color="dark" [routerLink]="['/afil-slides']">
         <ion-icon name="car-sport"></ion-icon>
         <p>Ser WayDriver</p>
       </ion-button>
-      <ion-button class="fuente" expand="block" fill="outline" color="danger">
+      <ion-button class="fuente" expand="block" fill="outline" color="danger" (click)="eliminar()">
         <ion-icon name="close"></ion-icon>
         <p>Eliminar Cuenta</p>
       </ion-button>
     </ion-card-content>
   </ion-card>
-  <ion-card>
+  <ion-card *ngIf="arrayUser[0].idRol == 1">
     <ion-card-header style="text-align: center; background-color: #2b2b2b;">
       <ion-label class="fuenteM">WayDriver</ion-label>
     </ion-card-header>
     <ion-card-content style="text-align: center">
-      <ion-button class="fuente" expand="block" fill="outline" color="dark">
+      <ion-button class="fuente" expand="block" fill="outline" color="dark" [routerLink]="['/ajustes-veh']">
         <ion-icon name="car"></ion-icon>
         <p>Vehículo</p>
       </ion-button>
-      <ion-button class="fuente" expand="block" fill="outline" color="danger">
+      <ion-button class="fuente" expand="block" fill="outline" color="danger" (click)="dejarAfil()">
         <ion-icon name="exit"></ion-icon>
         <p>Dejar de Serlo</p>
       </ion-button>
@@ -47,7 +47,7 @@
 </ion-content>
 
 <ion-footer style="background-color: white">
-  <ion-button class="fuente" style="margin-top: 0%; margin-bottom: -2px" expand="full" fill="outline" color="danger" [routerLink] = "['/']">
+  <ion-button class="fuente" style="margin-top: 0%; margin-bottom: -2px" expand="full" fill="outline" color="danger" (click) = "logout()">
     <ion-icon name="arrow-back"></ion-icon>
     Cerrar Sesión
   </ion-button>

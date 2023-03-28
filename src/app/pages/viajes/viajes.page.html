@@ -15,17 +15,21 @@
     </ion-button>
   </center>
   <!-- BLOQUE CONDUCTORES-->
-  <ion-card>
-    <ion-item>
-      <ion-avatar>
-        <ion-img src="assets\images\noperfil.jpg"></ion-img>
-      </ion-avatar>
-      <p class="fuenteS" style="margin-left:10px">
-        <label class="fuenteM">Conductor 1</label>
-        <br>Hora de Salida: HH:MM<br>Toca para ver más información
-      </p>
-    </ion-item>
-  </ion-card>
+  <div *ngFor="let v of arrayViajes">
+    <ion-card>
+      <ion-item>
+        <ion-avatar>
+          <ion-img src="assets\images\noperfil.jpg"></ion-img>
+        </ion-avatar>
+        <p class="fuenteS" style="margin-left:10px">
+          <label class="fuenteM">{{ v.patente }}</label>
+          <br>Hora de Salida: {{ v.horaSalida }}<br>Toca para ver más información
+        </p>
+      </ion-item>
+    </ion-card>
+
+  </div>
+  
 
   <ion-card>
     <ion-item>

@@ -1,17 +1,15 @@
 <ion-content [fullscreen]="true">
-  <head></head>
-
   <div id="container">
     <img style="margin-top: -20px;" src="assets\images\logo.png" alt="">
 
     <ion-card style="margin-top: 0px;">
-      <ion-input class="fuenteM" [(ngModel)] = "correo" type="email" placeholder="Correo"></ion-input>
+      <ion-input class="fuenteM" [(ngModel)] = "username" type="text" placeholder="Correo"></ion-input>
     </ion-card>
     <ion-card style="margin-bottom: 0px;">
       <ion-input class="fuenteM" [(ngModel)] = "pass" type="password" placeholder="Contraseña"></ion-input>
     </ion-card>
       <div class='test' style="padding-top: 10%;">
-        <ion-button class="fuenteM" fill="outline" color="dark" size="default" [routerLink] = "['/main']">Entrar</ion-button>
+        <ion-button data-testid="btn-1" fill="outline" color="dark" size="default" (click) = "login()">Entrar</ion-button>
       </div>
   </div>
 </ion-content>
